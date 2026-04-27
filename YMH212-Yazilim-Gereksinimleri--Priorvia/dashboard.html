@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Priorvia – Dashboard</title>
   <link rel="stylesheet" href="priorvia.css" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
 </head>
-<body class="dashboard-body">
+<body class="dashboard-body" id="appBody">
 
   <!-- ========== SIDEBAR ========== -->
   <aside class="db-sidebar" id="dbSidebar">
@@ -28,42 +27,42 @@
     <nav class="db-nav">
       <span class="db-nav-label">GENEL</span>
       <a href="dashboard.html" class="db-nav-item active">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         <span class="db-nav-text">Dashboard</span>
       </a>
       <a href="#" class="db-nav-item">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         <span class="db-nav-text">Projeler</span>
         <span class="db-nav-badge" id="projectCount">0</span>
       </a>
       <a href="#" class="db-nav-item">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="db-nav-text">Görevlerim</span>
         <span class="db-nav-badge" id="myTaskCount">0</span>
       </a>
 
       <span class="db-nav-label">YÖNETİM</span>
-      <a href="#" class="db-nav-item">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <a href="#" class="db-nav-item" id="navTeam">
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span class="db-nav-text">Ekip &amp; Yetkiler</span>
       </a>
       <a href="#" class="db-nav-item">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="db-nav-text">Bildirimler</span>
         <span class="db-nav-badge db-badge-red" id="notifBadge">0</span>
       </a>
       <a href="#" class="db-nav-item">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span class="db-nav-text">Takvim</span>
       </a>
       <a href="#" class="db-nav-item">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
         <span class="db-nav-text">Arşiv</span>
       </a>
 
       <span class="db-nav-label">HESAP</span>
       <a href="#" class="db-nav-item">
-        <svg class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 1 4.93 19.07"/></svg>
+        <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 1 4.93 19.07"/></svg>
         <span class="db-nav-text">Ayarlar</span>
       </a>
     </nav>
@@ -72,7 +71,7 @@
       <div class="db-user-avatar" id="sidebarAvatar">–</div>
       <div class="db-user-info">
         <div class="db-user-name" id="sidebarName">Kullanıcı</div>
-        <div class="db-user-role">Üye</div>
+        <div class="db-user-role" id="sidebarRole">Üye</div>
       </div>
       <button class="db-logout-btn" title="Çıkış" onclick="window.location.href='homePage.html'">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -89,10 +88,15 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Ana Sayfa
         <span class="db-bc-sep">/</span>
-        <span class="db-bc-current">Dashboard</span>
+        <span class="db-bc-current" id="breadcrumbCurrent">Dashboard</span>
       </div>
 
       <div class="db-topbar-right">
+        <!-- Dark mode -->
+        <button class="db-icon-btn" id="themeToggle" title="Tema Değiştir">
+          <svg width="16" height="16" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
         <div class="db-search">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <input type="text" id="globalSearch" placeholder="Görev veya proje ara..." />
@@ -118,24 +122,17 @@
           </button>
           <div class="db-dropdown db-profile-drop" id="profileDropdown">
             <div class="db-dropdown-head">Hesabım</div>
-            <a href="#" class="db-drop-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil
-            </a>
-            <a href="#" class="db-drop-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 1 4.93 19.07"/></svg>Ayarlar
-            </a>
+            <a href="#" class="db-drop-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil</a>
+            <a href="#" class="db-drop-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 1 4.93 19.07"/></svg>Ayarlar</a>
             <div class="db-drop-divider"></div>
-            <a href="homePage.html" class="db-drop-item db-drop-danger">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Çıkış Yap
-            </a>
+            <a href="homePage.html" class="db-drop-item db-drop-danger"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Çıkış Yap</a>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- PAGE CONTENT -->
-    <main class="db-page">
-
+    <!-- ===== DASHBOARD VIEW ===== -->
+    <main class="db-page" id="viewDashboard">
       <div class="db-page-header">
         <div>
           <h1 class="db-page-title">Dashboard</h1>
@@ -147,53 +144,30 @@
         </button>
       </div>
 
-      <!-- STATS -->
       <div class="db-stats">
         <div class="db-stat-card">
-          <div class="db-stat-icon si-green">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          </div>
-          <div>
-            <div class="db-stat-value" id="statTotal">0</div>
-            <div class="db-stat-label">Toplam Görev</div>
-          </div>
+          <div class="db-stat-icon si-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div><div class="db-stat-value" id="statTotal">0</div><div class="db-stat-label">Toplam Görev</div></div>
         </div>
         <div class="db-stat-card">
-          <div class="db-stat-icon si-orange">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div>
-            <div class="db-stat-value" id="statInProgress">0</div>
-            <div class="db-stat-label">Devam Ediyor</div>
-          </div>
+          <div class="db-stat-icon si-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div class="db-stat-value" id="statInProgress">0</div><div class="db-stat-label">Devam Ediyor</div></div>
         </div>
         <div class="db-stat-card">
-          <div class="db-stat-icon si-blue">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <div>
-            <div class="db-stat-value" id="statDone">0</div>
-            <div class="db-stat-label">Tamamlandı</div>
-          </div>
+          <div class="db-stat-icon si-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div><div class="db-stat-value" id="statDone">0</div><div class="db-stat-label">Tamamlandı</div></div>
         </div>
         <div class="db-stat-card db-stat-card--progress">
-          <div class="db-stat-icon si-purple">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-          </div>
+          <div class="db-stat-icon si-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
           <div style="flex:1">
             <div class="db-stat-value" id="statRate">%0</div>
             <div class="db-stat-label">Tamamlanma Oranı</div>
-            <div class="db-mini-progress">
-              <div class="db-mini-fill" id="miniProgressFill" style="width:0%"></div>
-            </div>
+            <div class="db-mini-progress"><div class="db-mini-fill" id="miniProgressFill" style="width:0%"></div></div>
           </div>
         </div>
       </div>
 
-      <!-- CONTENT GRID -->
       <div class="db-content-grid">
-
-        <!-- KANBAN -->
         <section class="db-kanban-section">
           <div class="db-section-hd">
             <h2 class="db-section-title">
@@ -207,139 +181,123 @@
                 <option value="med">Orta</option>
                 <option value="low">Düşük</option>
               </select>
-              <select class="db-select" id="filterAssignee">
-                <option value="">Tüm Kişiler</option>
-              </select>
+              <select class="db-select" id="filterAssignee"><option value="">Tüm Kişiler</option></select>
             </div>
           </div>
-
           <div class="db-kanban">
             <div class="db-k-col" data-col="todo">
-              <div class="db-k-header">
-                <span class="db-k-dot" style="background:#94a3b8"></span>
-                <span class="db-k-title">YAPILACAK</span>
-                <span class="db-k-count" id="cnt-todo">0</span>
-              </div>
-              <div class="db-k-list" id="list-todo"
-                   ondragover="event.preventDefault()" ondrop="onDrop(event,'todo')">
-                <div class="db-k-empty" id="empty-todo">Henüz görev eklenmedi.</div>
-              </div>
-              <button class="db-k-add" onclick="openDrawer('todo')">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Görev Ekle
-              </button>
+              <div class="db-k-header"><span class="db-k-dot" style="background:#94a3b8"></span><span class="db-k-title">YAPILACAK</span><span class="db-k-count" id="cnt-todo">0</span></div>
+              <div class="db-k-list" id="list-todo" ondragover="event.preventDefault()" ondrop="onDrop(event,'todo')"><div class="db-k-empty" id="empty-todo">Henüz görev eklenmedi.</div></div>
+              <button class="db-k-add" onclick="openDrawer('todo')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Görev Ekle</button>
             </div>
-
             <div class="db-k-col" data-col="inprogress">
-              <div class="db-k-header">
-                <span class="db-k-dot" style="background:#f59e0b"></span>
-                <span class="db-k-title">DEVAM EDİYOR</span>
-                <span class="db-k-count" id="cnt-inprogress">0</span>
-              </div>
-              <div class="db-k-list" id="list-inprogress"
-                   ondragover="event.preventDefault()" ondrop="onDrop(event,'inprogress')">
-                <div class="db-k-empty" id="empty-inprogress">Henüz görev eklenmedi.</div>
-              </div>
-              <button class="db-k-add" onclick="openDrawer('inprogress')">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Görev Ekle
-              </button>
+              <div class="db-k-header"><span class="db-k-dot" style="background:#f59e0b"></span><span class="db-k-title">DEVAM EDİYOR</span><span class="db-k-count" id="cnt-inprogress">0</span></div>
+              <div class="db-k-list" id="list-inprogress" ondragover="event.preventDefault()" ondrop="onDrop(event,'inprogress')"><div class="db-k-empty" id="empty-inprogress">Henüz görev eklenmedi.</div></div>
+              <button class="db-k-add" onclick="openDrawer('inprogress')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Görev Ekle</button>
             </div>
-
             <div class="db-k-col" data-col="done">
-              <div class="db-k-header">
-                <span class="db-k-dot" style="background:#22c55e"></span>
-                <span class="db-k-title">TAMAMLANDI</span>
-                <span class="db-k-count" id="cnt-done">0</span>
-              </div>
-              <div class="db-k-list" id="list-done"
-                   ondragover="event.preventDefault()" ondrop="onDrop(event,'done')">
-                <div class="db-k-empty" id="empty-done">Henüz görev eklenmedi.</div>
-              </div>
-              <button class="db-k-add" onclick="openDrawer('done')">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Görev Ekle
-              </button>
+              <div class="db-k-header"><span class="db-k-dot" style="background:#22c55e"></span><span class="db-k-title">TAMAMLANDI</span><span class="db-k-count" id="cnt-done">0</span></div>
+              <div class="db-k-list" id="list-done" ondragover="event.preventDefault()" ondrop="onDrop(event,'done')"><div class="db-k-empty" id="empty-done">Henüz görev eklenmedi.</div></div>
+              <button class="db-k-add" onclick="openDrawer('done')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Görev Ekle</button>
             </div>
           </div>
         </section>
 
-        <!-- RIGHT PANEL -->
         <aside class="db-right">
-
           <div class="db-panel-card">
-            <div class="db-panel-head">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              Uyarılar
-            </div>
+            <div class="db-panel-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Uyarılar</div>
             <div id="alertList"><p class="db-empty-sm">Yaklaşan teslim tarihi yok.</p></div>
           </div>
-
           <div class="db-panel-card">
-            <div class="db-panel-head">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Aktivite Kaydı
-            </div>
+            <div class="db-panel-head"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aktivite Kaydı</div>
             <div id="activityList"><p class="db-empty-sm">Henüz aktivite yok.</p></div>
           </div>
-
         </aside>
       </div>
     </main>
-  </div>
 
-  <!-- DRAWER -->
+    <!-- ===== EKİP & YETKİLER VIEW ===== -->
+    <main class="db-page" id="viewTeam" style="display:none">
+      <div class="db-page-header">
+        <div>
+          <h1 class="db-page-title">Ekip &amp; Yetkiler</h1>
+          <p class="db-page-sub">Proje üyelerini yönet ve davet et</p>
+        </div>
+        <button class="btn-primary" id="inviteBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Üye Davet Et
+        </button>
+      </div>
+
+      <!-- Rol Özeti -->
+      <div class="db-stats" style="grid-template-columns:repeat(3,1fr)">
+        <div class="db-stat-card">
+          <div class="db-stat-icon si-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div><div class="db-stat-value" id="teamTotalCount">0</div><div class="db-stat-label">Toplam Üye</div></div>
+        </div>
+        <div class="db-stat-card">
+          <div class="db-stat-icon si-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <div><div class="db-stat-value" id="teamPMCount">0</div><div class="db-stat-label">Proje Yöneticisi</div></div>
+        </div>
+        <div class="db-stat-card">
+          <div class="db-stat-icon si-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div><div class="db-stat-value" id="teamMemberCount">0</div><div class="db-stat-label">Ekip Üyesi</div></div>
+        </div>
+      </div>
+
+      <div class="db-content-grid" style="grid-template-columns:1fr">
+        <div class="db-kanban-section">
+          <div class="db-section-hd">
+            <h2 class="db-section-title">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--green-700)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Üye Listesi
+            </h2>
+          </div>
+          <div id="teamMemberList">
+            <p class="db-empty-sm" style="padding:24px 0">Henüz üye eklenmedi. "Üye Davet Et" butonunu kullanın.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div><!-- /db-main -->
+
+  <!-- ===== GÖREV DRAWER ===== -->
   <div class="db-overlay" id="dbOverlay"></div>
   <div class="db-drawer" id="taskDrawer">
     <div class="db-drawer-hd">
       <h3 id="drawerTitle">Yeni Görev</h3>
-      <button id="drawerClose">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <button id="drawerClose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="db-drawer-body">
       <input type="hidden" id="editTaskId" />
-
       <div class="db-fg">
         <label>Görev Başlığı <span style="color:#e53e3e">*</span></label>
         <input type="text" id="fTitle" class="db-input" placeholder="Görev başlığını girin..." />
         <span class="db-ferr" id="fTitleErr">Bu alan zorunludur.</span>
       </div>
-
       <div class="db-fg">
         <label>Açıklama</label>
         <textarea id="fDesc" class="db-input" style="min-height:80px;resize:vertical" placeholder="Görev açıklaması..."></textarea>
       </div>
-
       <div class="db-form-row">
         <div class="db-fg">
           <label>Öncelik</label>
-          <select id="fPriority" class="db-input">
-            <option value="high">🔴 Yüksek</option>
-            <option value="med" selected>🟡 Orta</option>
-            <option value="low">🟢 Düşük</option>
-          </select>
+          <select id="fPriority" class="db-input"><option value="high">🔴 Yüksek</option><option value="med" selected>🟡 Orta</option><option value="low">🟢 Düşük</option></select>
         </div>
         <div class="db-fg">
           <label>Teslim Tarihi</label>
           <input type="date" id="fDate" class="db-input" />
         </div>
       </div>
-
       <div class="db-fg">
         <label>Atanan Kişi</label>
         <input type="text" id="fAssignee" class="db-input" placeholder="Ad Soyad" />
       </div>
-
       <div class="db-fg">
         <label>Durum</label>
-        <select id="fStatus" class="db-input">
-          <option value="todo">Yapılacak</option>
-          <option value="inprogress">Devam Ediyor</option>
-          <option value="done">Tamamlandı</option>
-        </select>
+        <select id="fStatus" class="db-input"><option value="todo">Yapılacak</option><option value="inprogress">Devam Ediyor</option><option value="done">Tamamlandı</option></select>
       </div>
-
       <div class="db-fg" id="progressGroup" style="display:none">
         <label>İlerleme: <span id="progressVal">0</span>%</label>
         <input type="range" id="fProgress" style="width:100%;accent-color:var(--green-700)" min="0" max="100" value="0" />
@@ -348,6 +306,37 @@
     <div class="db-drawer-ft">
       <button class="btn-ghost" id="drawerCancel">İptal</button>
       <button class="btn-primary" id="drawerSave">Kaydet</button>
+    </div>
+  </div>
+
+  <!-- ===== DAVET DRAWER ===== -->
+  <div class="db-drawer" id="inviteDrawer" style="width:380px">
+    <div class="db-drawer-hd">
+      <h3>Üye Davet Et</h3>
+      <button id="inviteDrawerClose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="db-drawer-body">
+      <div class="db-fg">
+        <label>Ad Soyad <span style="color:#e53e3e">*</span></label>
+        <input type="text" id="inviteName" class="db-input" placeholder="Üyenin adı soyadı" />
+      </div>
+      <div class="db-fg">
+        <label>E-posta</label>
+        <input type="email" id="inviteEmail" class="db-input" placeholder="ornek@email.com" />
+        <span style="font-size:11.5px;color:var(--text-muted);margin-top:3px">Kayıtlıysa "Projeye Katıl", değilse "Kayıt Ol" bağlantısı gönderilir.</span>
+      </div>
+      <div class="db-fg">
+        <label>Rol</label>
+        <select id="inviteRole" class="db-input">
+          <option value="member">Ekip Üyesi — Atanan görevleri düzenleyebilir</option>
+          <option value="pm">Proje Yöneticisi — Proje ve ekip yönetimi yapabilir</option>
+          <option value="viewer">Görüntüleyici — Sadece görüntüleyebilir</option>
+        </select>
+      </div>
+    </div>
+    <div class="db-drawer-ft">
+      <button class="btn-ghost" id="inviteCancel">İptal</button>
+      <button class="btn-primary" id="inviteSave">Davet Gönder</button>
     </div>
   </div>
 
