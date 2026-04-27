@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Priorvia – Görev ve Öncelik Yönetimi</title>
+  <link rel="stylesheet" href="priorvia.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <img src="images/logo_green_navbar.png" alt="Priorvia" class="logo-img" />
+    </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="#features">Özellikler</a>
+        <a href="#how">Nasıl Çalışır</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn-ghost" id="signin-btn">Giriş Yap</button>
+        <button class="btn-primary" id="signup-btn">Ücretsiz Başla</button>
+        <button class="hamburger" id="hamburger" aria-label="Menü">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="grid-overlay"></div>
+    </div>
+    <div class="hero-content reveal">
+      <span class="hero-badge">✦ Ekip çalışması, yeniden tanımlandı</span>
+      <h1 class="hero-title">
+        Görevlerinizi<br/>
+        <span class="highlight">önceliklendirin,</span><br/>
+        ekibinizi<br/>
+        ilerletin.
+      </h1>
+      <p class="hero-sub">
+        Priorvia; öğrenci ekipleri ve küçük gruplar için tasarlanmış sade, hızlı ve güçlü bir görev yönetim platformudur. Karmaşık araçlara son.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary btn-lg" id="hero-signup">Hemen Başla </button>
+        <a href="#how" class="btn-outline-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Demo İzle
+        </a>
+      </div>
+    </div>
+
+    <!-- Floating Dashboard Preview -->
+    <div class="hero-visual reveal-delay">
+      <div class="dashboard-preview">
+        <div class="dp-header">
+          <div class="dp-dots"><span></span><span></span><span></span></div>
+          <span class="dp-title">Mobil Uygulama Projesi</span>
+          <span class="dp-badge">3 aktif görev</span>
+        </div>
+        <div class="dp-columns">
+          <div class="dp-col">
+            <div class="dp-col-label">
+              <span class="col-dot dot-todo"></span> Yapılacak
+            </div>
+            <div class="dp-card" data-priority="high">
+              <span class="priority-tag high">Yüksek</span>
+              <p>API entegrasyonu tamamla</p>
+              <div class="card-meta">
+                <span>📅 Yarın</span>
+                <div class="avatars"><img src="https://i.pravatar.cc/20?img=1" alt=""/><img src="https://i.pravatar.cc/20?img=2" alt=""/></div>
+              </div>
+            </div>
+            <div class="dp-card" data-priority="med">
+              <span class="priority-tag med">Orta</span>
+              <p>Login ekranı tasarımı</p>
+              <div class="card-meta">
+                <span>📅 3 gün</span>
+                <div class="avatars"><img src="https://i.pravatar.cc/20?img=3" alt=""/></div>
+              </div>
+            </div>
+          </div>
+          <div class="dp-col">
+            <div class="dp-col-label">
+              <span class="col-dot dot-progress"></span> Devam Ediyor
+            </div>
+            <div class="dp-card active" data-priority="high">
+              <span class="priority-tag high">Yüksek</span>
+              <p>Veritabanı şeması</p>
+              <div class="card-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+                <span>%65</span>
+              </div>
+              <div class="card-meta">
+                <span>📅 Bugün</span>
+                <div class="avatars"><img src="https://i.pravatar.cc/20?img=4" alt=""/><img src="https://i.pravatar.cc/20?img=5" alt=""/></div>
+              </div>
+            </div>
+          </div>
+          <div class="dp-col">
+            <div class="dp-col-label">
+              <span class="col-dot dot-done"></span> Tamamlandı
+            </div>
+            <div class="dp-card done">
+              <span class="priority-tag low">Düşük</span>
+              <p>Proje planlaması ✓</p>
+              <div class="card-meta">
+                <span>✅ Dün</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dp-footer">
+          <div class="dp-stat"><span class="stat-num">8</span><span>Görev</span></div>
+          <div class="dp-stat"><span class="stat-num">3</span><span>Üye</span></div>
+          <div class="dp-stat"><span class="stat-num">%62</span><span>Tamamlandı</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-header reveal">
+      <span class="section-tag">Özellikler</span>
+      <h2>İhtiyacınız olan her şey,<br/>fazlası yok.</h2>
+      <p>Priorvia'yı kullanmak için eğitime gerek yok. Açın, görev oluşturun, işinize bakın.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal" style="--delay:0.1s">
+        <div class="feat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>Kanban Panosu</h3>
+        <p>Görevleri sürükle-bırak ile taşıyın. Yapılacak, devam ediyor, tamamlandı — her şey bir bakışta.</p>
+      </div>
+      <div class="feat-card reveal" style="--delay:0.2s">
+        <div class="feat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Ekip İşbirliği</h3>
+        <p>Üyeleri davet edin, görev atayın, gerçek zamanlı yorumlar bırakın. Herkes aynı sayfada.</p>
+      </div>
+      <div class="feat-card feat-card--large reveal" style="--delay:0.15s">
+        <div class="feat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Öncelik Sistemi</h3>
+        <p>Her göreve Yüksek, Orta veya Düşük öncelik atayın. Renk kodlamalı etiketler sayesinde kritik görevler hiç gözden kaçmaz.</p>
+        <div class="feat-demo">
+          <span class="priority-tag high">Yüksek</span>
+          <span class="priority-tag med">Orta</span>
+          <span class="priority-tag low">Düşük</span>
+        </div>
+      </div>
+      <div class="feat-card reveal" style="--delay:0.25s">
+        <div class="feat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </div>
+        <h3>Proje İlerlemesi</h3>
+        <p>Tamamlanma oranını görsel grafiklerle takip edin. Anlık güncellenen istatistikler.</p>
+      </div>
+      <div class="feat-card reveal" style="--delay:0.3s">
+        <div class="feat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <h3>Akıllı Bildirimler</h3>
+        <p>Son teslim tarihleri yaklaştığında uyarı alın. Sayfayı yenilemenize gerek yok.</p>
+      </div>
+      <div class="feat-card reveal" style="--delay:0.35s">
+        <div class="feat-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h3>Global Arama</h3>
+        <p>Tüm projeler ve görevler arasında anında arama yapın. Etiket veya kişiye göre filtreleyin.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="section-header reveal">
+      <span class="section-tag">Nasıl Çalışır</span>
+      <h2>3 adımda başlayın</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal" style="--delay:0s">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Hesap oluşturun</h3>
+          <p>E-posta ve şifrenizle saniyeler içinde kayıt olun. Kredi kartı gerekmez.</p>
+        </div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step reveal" style="--delay:0.15s">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Ekibinizi davet edin</h3>
+          <p>Proje oluşturun, ekip üyelerini e-posta ile davet edin, rolleri belirleyin.</p>
+        </div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step reveal" style="--delay:0.3s">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Görev yönetmeye başlayın</h3>
+          <p>Görev oluşturun, önceliklendirin, atayın. İşler artık çok daha düzenli.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  
+  <!-- CTA -->
+  <section class="cta reveal">
+    <div class="cta-inner">
+      <h2>Ekibinizin verimliliğini<br/>bugün artırın.</h2>
+      <p>Dakikalar içinde kurulur. </p>
+      <button class="btn-primary btn-lg btn-white" id="cta-btn">Ücretsiz Hesap Oluştur</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <span class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#2D6A4F"/><rect x="6" y="8" width="6" height="6" rx="1.5" fill="#95D5B2"/><rect x="6" y="16" width="6" height="4" rx="1.5" fill="#52B788" opacity="0.6"/><rect x="14" y="6" width="8" height="4" rx="1.5" fill="#74C69D"/><rect x="14" y="12" width="8" height="6" rx="1.5" fill="#B7E4C7"/><rect x="14" y="20" width="5" height="3" rx="1.5" fill="#52B788" opacity="0.5"/></svg>
+          </span>
+          <span class="logo-text">Priorvia</span>
+        </a>
+        <p>Ekipler için akıllı görev<br/>yönetim platformu.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Ürün</h4>
+          <a href="#">Özellikler</a>
+          <a href="#">Planlar</a>
+          <a href="#">Güvenlik</a>
+        </div>
+        <div class="footer-col">
+          <h4>Kaynaklar</h4>
+          <a href="#">Dokümantasyon</a>
+          <a href="#">Blog</a>
+          <a href="#">Yardım Merkezi</a>
+        </div>
+        <div class="footer-col">
+          <h4>Şirket</h4>
+          <a href="#">Hakkımızda</a>
+          <a href="#">İletişim</a>
+          <a href="#">Gizlilik</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ReqMind · Priorvia. Ankara Üniversitesi YMH 212 Projesi.</p>
+    </div>
+  </footer>
+
+  <!-- SIGN IN MODAL -->
+  <div class="modal-overlay" id="signin-modal">
+    <div class="modal">
+      <button class="modal-close" id="close-signin">✕</button>
+      <div class="modal-logo">
+        <svg width="32" height="32" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#2D6A4F"/><rect x="6" y="8" width="6" height="6" rx="1.5" fill="#95D5B2"/><rect x="6" y="16" width="6" height="4" rx="1.5" fill="#52B788" opacity="0.6"/><rect x="14" y="6" width="8" height="4" rx="1.5" fill="#74C69D"/><rect x="14" y="12" width="8" height="6" rx="1.5" fill="#B7E4C7"/><rect x="14" y="20" width="5" height="3" rx="1.5" fill="#52B788" opacity="0.5"/></svg>
+        <span>Priorvia</span>
+      </div>
+      <h2>Tekrar hoş geldiniz</h2>
+      <p class="modal-sub">Hesabınıza giriş yapın</p>
+      <form class="modal-form" id="signin-form">
+        <div class="form-group">
+          <label for="signin-email">E-posta</label>
+          <input type="email" id="signin-email" placeholder="ornek@email.com" autocomplete="email" />
+          <span class="field-error" id="signin-email-err"></span>
+        </div>
+        <div class="form-group">
+          <label for="signin-password">Şifre</label>
+          <div class="input-wrapper">
+            <input type="password" id="signin-password" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="toggle-pw" data-target="signin-password">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-error" id="signin-pw-err"></span>
+        </div>
+        <div class="form-row">
+          <label class="checkbox-label"><input type="checkbox" /> Beni hatırla</label>
+          <a href="#" class="forgot-link">Şifremi unuttum</a>
+        </div>
+        <button type="submit" class="btn-primary btn-full">Giriş Yap</button>
+        <p class="modal-switch">Hesabınız yok mu? <button type="button" class="link-btn" id="go-signup">Ücretsiz kaydolun</button></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- SIGN UP MODAL -->
+  <div class="modal-overlay" id="signup-modal">
+    <div class="modal">
+      <button class="modal-close" id="close-signup">✕</button>
+      <div class="modal-logo">
+        <svg width="32" height="32" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#2D6A4F"/><rect x="6" y="8" width="6" height="6" rx="1.5" fill="#95D5B2"/><rect x="6" y="16" width="6" height="4" rx="1.5" fill="#52B788" opacity="0.6"/><rect x="14" y="6" width="8" height="4" rx="1.5" fill="#74C69D"/><rect x="14" y="12" width="8" height="6" rx="1.5" fill="#B7E4C7"/><rect x="14" y="20" width="5" height="3" rx="1.5" fill="#52B788" opacity="0.5"/></svg>
+        <span>Priorvia</span>
+      </div>
+      <h2>Hemen başlayın</h2>
+      <p class="modal-sub">Ücretsiz hesabınızı oluşturun</p>
+      <form class="modal-form" id="signup-form">
+        <div class="form-group">
+          <label for="signup-name">Ad Soyad</label>
+          <input type="text" id="signup-name" placeholder="Adınız Soyadınız" autocomplete="name" />
+          <span class="field-error" id="signup-name-err"></span>
+        </div>
+        <div class="form-group">
+          <label for="signup-email">E-posta</label>
+          <input type="email" id="signup-email" placeholder="ornek@email.com" autocomplete="email" />
+          <span class="field-error" id="signup-email-err"></span>
+        </div>
+        <div class="form-group">
+          <label for="signup-password">Şifre</label>
+          <div class="input-wrapper">
+            <input type="password" id="signup-password" placeholder="En az 8 karakter" autocomplete="new-password" />
+            <button type="button" class="toggle-pw" data-target="signup-password">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="pw-strength" id="pw-strength">
+            <div class="pw-bar"><div class="pw-fill" id="pw-fill"></div></div>
+            <span id="pw-label">Şifre gücü</span>
+          </div>
+          <span class="field-error" id="signup-pw-err"></span>
+        </div>
+        <label class="checkbox-label terms-check">
+          <input type="checkbox" id="terms-check" />
+          <span><a href="#">Kullanım Şartları</a>'nı okudum ve kabul ediyorum</span>
+        </label>
+        <span class="field-error" id="terms-err"></span>
+        <button type="submit" class="btn-primary btn-full">Ücretsiz Hesap Oluştur</button>
+        <p class="modal-switch">Zaten hesabınız var mı? <button type="button" class="link-btn" id="go-signin">Giriş yapın</button></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS TOAST -->
+  <div class="toast" id="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-msg">İşlem başarılı!</span>
+  </div>
+
+  <script src="homePage.js"></script>
+</body>
+</html>
