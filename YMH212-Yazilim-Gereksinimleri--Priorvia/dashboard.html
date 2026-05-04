@@ -26,36 +26,36 @@
 
     <nav class="db-nav">
       <span class="db-nav-label">GENEL</span>
-      <a href="dashboard.html" class="db-nav-item active">
+      <a href="#" class="db-nav-item active" data-view="dashboard">
         <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         <span class="db-nav-text">Dashboard</span>
       </a>
-      <a href="#" class="db-nav-item">
+      <a href="#" class="db-nav-item" data-view="projects">
         <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         <span class="db-nav-text">Projeler</span>
         <span class="db-nav-badge" id="projectCount">0</span>
       </a>
-      <a href="#" class="db-nav-item">
+      <a href="#" class="db-nav-item" data-view="mytasks">
         <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="db-nav-text">Görevlerim</span>
         <span class="db-nav-badge" id="myTaskCount">0</span>
       </a>
 
       <span class="db-nav-label">YÖNETİM</span>
-      <a href="#" class="db-nav-item" id="navTeam">
+      <a href="#" class="db-nav-item" data-view="team">
         <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span class="db-nav-text">Ekip &amp; Yetkiler</span>
       </a>
-      <a href="#" class="db-nav-item">
+      <a href="#" class="db-nav-item" data-view="notifications">
         <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="db-nav-text">Bildirimler</span>
         <span class="db-nav-badge db-badge-red" id="notifBadge">0</span>
       </a>
-      <a href="#" class="db-nav-item">
+      <a href="#" class="db-nav-item" data-view="calendar">
         <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span class="db-nav-text">Takvim</span>
       </a>
-      <a href="#" class="db-nav-item">
+      <a href="#" class="db-nav-item" data-view="archive">
         <svg width="18" height="18" class="db-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
         <span class="db-nav-text">Arşiv</span>
       </a>
@@ -92,7 +92,6 @@
       </div>
 
       <div class="db-topbar-right">
-        <!-- Dark mode -->
         <button class="db-icon-btn" id="themeToggle" title="Tema Değiştir">
           <svg width="16" height="16" id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
@@ -107,10 +106,10 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             <span class="db-notif-dot" id="notifDot"></span>
           </button>
-          <div class="db-dropdown" id="notifDropdown">
-            <div class="db-dropdown-head">Bildirimler</div>
-            <div id="notifList"><p class="db-empty-sm">Henüz bildirim yok.</p></div>
-            <a href="#" class="db-dropdown-foot">Tümünü Gör</a>
+          <div class="db-dropdown db-notif-dropdown" id="notifDropdown">
+            <div class="db-dropdown-head">Bildirimler <span id="notifDropCount" class="db-dd-count">0</span></div>
+            <div id="notifList" class="db-notif-scroll"><p class="db-empty-sm">Henüz bildirim yok.</p></div>
+            <a href="#" class="db-dropdown-foot" onclick="showView('notifications');return false;">Tümünü Gör</a>
           </div>
         </div>
 
@@ -216,7 +215,89 @@
       </div>
     </main>
 
-    <!-- ===== EKİP & YETKİLER VIEW ===== -->
+    <!-- ===== PROJELERView ===== -->
+    <main class="db-page" id="viewProjects" style="display:none">
+      <div class="db-page-header">
+        <div>
+          <h1 class="db-page-title">Projeler</h1>
+          <p class="db-page-sub" id="projectsDoneCount">0 proje aktif</p>
+        </div>
+        <button class="btn-primary" id="newProjectBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Yeni Proje
+        </button>
+      </div>
+
+      <div class="db-projects-table-wrap">
+        <div class="db-proj-table-header">
+          <span>PROJE</span>
+          <span>ÜYELER</span>
+          <span>BÜTÇE</span>
+          <span>TAMAMLANMA</span>
+          <span></span>
+        </div>
+        <div id="projectsList"></div>
+      </div>
+    </main>
+
+    <!-- ===== GÖREVLERİM VIEW ===== -->
+    <main class="db-page" id="viewMyTasks" style="display:none">
+      <div class="db-page-header">
+        <div>
+          <h1 class="db-page-title">Görevlerim</h1>
+          <p class="db-page-sub">Size atanan görevler</p>
+        </div>
+        <button class="btn-primary" onclick="openDrawer('todo')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Yeni Görev
+        </button>
+      </div>
+      <div class="db-mytasks-list" id="myTasksList"></div>
+    </main>
+
+    <!-- ===== BİLDİRİMLER VIEW ===== -->
+    <main class="db-page" id="viewNotifications" style="display:none">
+      <div class="db-page-header">
+        <div>
+          <h1 class="db-page-title">Bildirimler</h1>
+          <p class="db-page-sub">Tüm sistem bildirimleri</p>
+        </div>
+        <button class="btn-ghost" onclick="clearNotifs()">Tümünü Temizle</button>
+      </div>
+      <div class="db-notif-full-list" id="notifFullList"></div>
+    </main>
+
+    <!-- ===== TAKVİM VIEW ===== -->
+    <main class="db-page" id="viewCalendar" style="display:none">
+      <div class="db-page-header">
+        <div>
+          <h1 class="db-page-title">Takvim</h1>
+          <p class="db-page-sub" id="calendarMonthLabel"></p>
+        </div>
+        <div class="db-cal-controls">
+          <select class="db-select db-cal-select" id="calMonthSelect"></select>
+          <select class="db-select db-cal-select" id="calYearSelect"></select>
+          <div class="db-cal-nav">
+            <button class="db-cal-nav-btn" id="calPrev" title="Önceki Ay">&#8249;</button>
+            <button class="db-cal-nav-btn" id="calNext" title="Sonraki Ay">&#8250;</button>
+          </div>
+        </div>
+      </div>
+      <div class="db-calendar" id="calendarGrid"></div>
+    </main>
+
+    <!-- ===== ARŞİV VIEW ===== -->
+    <main class="db-page" id="viewArchive" style="display:none">
+      <div class="db-page-header">
+        <div>
+          <h1 class="db-page-title">Arşiv</h1>
+          <p class="db-page-sub">PM onaylı tamamlanan görevler</p>
+        </div>
+      </div>
+      <div class="db-archive-list" id="archiveList"></div>
+    </main>
+
+    <!-- ===== EKİP VIEW ===== -->
     <main class="db-page" id="viewTeam" style="display:none">
       <div class="db-page-header">
         <div>
@@ -229,7 +310,6 @@
         </button>
       </div>
 
-      <!-- Rol Özeti -->
       <div class="db-stats" style="grid-template-columns:repeat(3,1fr)">
         <div class="db-stat-card">
           <div class="db-stat-icon si-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
@@ -253,9 +333,7 @@
               Üye Listesi
             </h2>
           </div>
-          <div id="teamMemberList">
-            <p class="db-empty-sm" style="padding:24px 0">Henüz üye eklenmedi. "Üye Davet Et" butonunu kullanın.</p>
-          </div>
+          <div id="teamMemberList"><p class="db-empty-sm" style="padding:24px 0">Henüz üye eklenmedi.</p></div>
         </div>
       </div>
     </main>
@@ -275,6 +353,10 @@
         <label>Görev Başlığı <span style="color:#e53e3e">*</span></label>
         <input type="text" id="fTitle" class="db-input" placeholder="Görev başlığını girin..." />
         <span class="db-ferr" id="fTitleErr">Bu alan zorunludur.</span>
+      </div>
+      <div class="db-fg">
+        <label>Proje</label>
+        <select id="fProject" class="db-input"><option value="">— Proje Seçin —</option></select>
       </div>
       <div class="db-fg">
         <label>Açıklama</label>
@@ -323,7 +405,6 @@
       <div class="db-fg">
         <label>E-posta</label>
         <input type="email" id="inviteEmail" class="db-input" placeholder="ornek@email.com" />
-        <span style="font-size:11.5px;color:var(--text-muted);margin-top:3px">Kayıtlıysa "Projeye Katıl", değilse "Kayıt Ol" bağlantısı gönderilir.</span>
       </div>
       <div class="db-fg">
         <label>Rol</label>
@@ -337,6 +418,53 @@
     <div class="db-drawer-ft">
       <button class="btn-ghost" id="inviteCancel">İptal</button>
       <button class="btn-primary" id="inviteSave">Davet Gönder</button>
+    </div>
+  </div>
+
+  <!-- ===== YENİ PROJE DRAWER ===== -->
+  <div class="db-drawer" id="projectDrawer" style="width:420px">
+    <div class="db-drawer-hd">
+      <h3 id="projectDrawerTitle">Yeni Proje</h3>
+      <button id="projectDrawerClose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="db-drawer-body">
+      <input type="hidden" id="editProjectId" />
+      <div class="db-fg">
+        <label>Proje Adı <span style="color:#e53e3e">*</span></label>
+        <input type="text" id="pName" class="db-input" placeholder="Proje adı..." />
+      </div>
+      <div class="db-fg">
+        <label>Açıklama</label>
+        <textarea id="pDesc" class="db-input" style="min-height:60px;resize:vertical" placeholder="Proje açıklaması..."></textarea>
+      </div>
+      <div class="db-form-row">
+        <div class="db-fg">
+          <label>Bütçe ($)</label>
+          <input type="number" id="pBudget" class="db-input" placeholder="0" min="0" />
+        </div>
+        <div class="db-fg">
+          <label>Bitiş Tarihi</label>
+          <input type="date" id="pDeadline" class="db-input" />
+        </div>
+      </div>
+      <div class="db-fg">
+        <label>Renk / İkon</label>
+        <select id="pColor" class="db-input">
+          <option value="blue">🔵 Mavi</option>
+          <option value="green">🟢 Yeşil</option>
+          <option value="orange">🟠 Turuncu</option>
+          <option value="purple">🟣 Mor</option>
+          <option value="red">🔴 Kırmızı</option>
+        </select>
+      </div>
+      <div class="db-fg">
+        <label>Üyeler <span style="font-size:11px;color:var(--text-muted)">(virgülle ayırın veya listeden seçin)</span></label>
+        <div id="memberCheckList" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px"></div>
+      </div>
+    </div>
+    <div class="db-drawer-ft">
+      <button class="btn-ghost" id="projectDrawerCancel">İptal</button>
+      <button class="btn-primary" id="projectDrawerSave">Kaydet</button>
     </div>
   </div>
 

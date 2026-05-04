@@ -960,26 +960,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.18; }
   .db-stats { grid-template-columns: 1fr 1fr; }
 }
 
-/* ── DARK MODE ───────────────────────────────── */
-body.dark-mode {
-  --bg-page:  #0f1a14;
-  --bg-white: #1a2e22;
-  --bg-card:  #1a2e22;
-  --border:        #2a4a36;
-  --border-strong: #2d6a4f;
-  --text-primary:   #e8f5ee;
-  --text-secondary: #9ec5b0;
-  --text-muted:     #6b8f7b;
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
-  --shadow-lg: 0 12px 48px rgba(0,0,0,0.5);
-}
-body.dark-mode .db-topbar { background: var(--bg-white); }
-body.dark-mode .db-k-col  { background: #152012; }
-body.dark-mode .db-task-card { background: var(--bg-white); }
-body.dark-mode .db-search { background: #152012; }
-body.dark-mode .db-icon-btn,
-body.dark-mode .db-profile-btn { background: #152012; }
+
 
 /* ── TEAM TABLE ──────────────────────────────── */
 .db-team-table { width: 100%; border-collapse: collapse; }
@@ -997,3 +978,429 @@ body.dark-mode .db-profile-btn { background: #152012; }
 .db-role-viewer { background:#f3f4f6; color:#6b7280; }
 .db-remove-btn { background:none; border:none; cursor:pointer; color:var(--text-muted); padding:4px 6px; border-radius:6px; transition:background .15s,color .15s; }
 .db-remove-btn:hover { background:#fee2e2; color:#e53e3e; }
+/* ================================================
+   PRIORVIA — EK STİLLER v3
+   Bu dosyayı priorvia.css sonuna ekleyin
+   ================================================ */
+
+/* ── YENİ DARK MODE (Göz yormayan) ──────────────
+   Önceki dark mode tanımını bu ile değiştirin
+   ─────────────────────────────────────────────── */
+body.dark-mode {
+  --bg-page:        #111c16;
+  --bg-white:       #182118;
+  --bg-card:        #1e2d22;
+  --border:         #253825;
+  --border-strong:  #2e5036;
+  --text-primary:   #d4e8dc;
+  --text-secondary: #8ab89a;
+  --text-muted:     #557565;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.6);
+  --green-50:  #0f1a12;
+  --green-100: #152019;
+}
+
+body.dark-mode .db-topbar         { background: #182118; border-color: #253825; }
+body.dark-mode .db-k-col           { background: #111c16; }
+body.dark-mode .db-task-card       { background: #1e2d22; border-color: #253825; }
+body.dark-mode .db-search          { background: #111c16; border-color: #253825; }
+body.dark-mode .db-icon-btn,
+body.dark-mode .db-profile-btn     { background: #111c16; border-color: #253825; }
+body.dark-mode .db-stat-card       { background: #1e2d22; border-color: #253825; }
+body.dark-mode .db-kanban-section  { background: #182118; border-color: #253825; }
+body.dark-mode .db-panel-card      { background: #1e2d22; border-color: #253825; }
+body.dark-mode .db-dropdown        { background: #1e2d22; border-color: #253825; }
+body.dark-mode .db-drop-item:hover { background: #253825; }
+body.dark-mode .db-drawer          { background: #182118; }
+body.dark-mode .db-input           { background: #111c16; border-color: #2e5036; color: #d4e8dc; }
+body.dark-mode .db-select          { background: #111c16; border-color: #253825; color: #d4e8dc; }
+body.dark-mode .db-team-table tr:hover td { background: #1a2a1d; }
+body.dark-mode .si-green   { background: #0d2416; color: #4ade80; }
+body.dark-mode .si-orange  { background: #2a1d0d; color: #fb923c; }
+body.dark-mode .si-blue    { background: #0d1a2a; color: #60a5fa; }
+body.dark-mode .si-purple  { background: #1a0d2a; color: #a78bfa; }
+body.dark-mode .priority-tag.high { background: #2a0d0d; color: #f87171; }
+body.dark-mode .priority-tag.med  { background: #2a1f0d; color: #fbbf24; }
+body.dark-mode .priority-tag.low  { background: #0d1f14; color: #4ade80; }
+body.dark-mode .db-notif-item.unread { background: #152019; }
+body.dark-mode .db-proj-row:hover  { background: #1a2a1d; }
+body.dark-mode .db-archive-row:hover { background: #1a2a1d; }
+body.dark-mode .db-mytask-card     { background: #1e2d22; border-color: #253825; }
+body.dark-mode .db-cal-cell        { background: #182118; border-color: #253825; }
+body.dark-mode .db-cal-today       { border-color: var(--green-600) !important; }
+body.dark-mode .db-notif-full-row  { border-color: #253825; }
+body.dark-mode .db-notif-full-row.unread { background: #152019; }
+
+/* ── PROJELER ────────────────────────────────── */
+.db-projects-table-wrap {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.db-proj-table-header {
+  display: grid;
+  grid-template-columns: 1fr 140px 100px 160px 70px;
+  padding: 10px 20px;
+  background: var(--green-50);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.db-proj-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 100px 160px 70px;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+}
+.db-proj-row:last-child { border-bottom: none; }
+.db-proj-row:hover { background: var(--green-50); }
+
+.db-proj-info { display: flex; align-items: center; gap: 12px; }
+.db-proj-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.db-proj-name { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+.db-proj-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.db-proj-members { display: flex; align-items: center; gap: -4px; }
+.db-proj-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--green-700); color: #fff;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--bg-white); margin-left: -6px;
+}
+.db-proj-avatar:first-child { margin-left: 0; }
+.db-proj-more { background: var(--border); color: var(--text-muted); }
+
+.db-proj-budget { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+.db-proj-completion {
+  display: flex; align-items: center; gap: 10px;
+}
+.db-proj-progress-bar {
+  flex: 1; height: 6px; background: var(--border);
+  border-radius: 3px; overflow: hidden;
+}
+.db-proj-progress-fill {
+  height: 100%; border-radius: 3px;
+  transition: width .5s ease;
+}
+.db-proj-pct { font-size: 12px; font-weight: 700; min-width: 32px; }
+
+.db-proj-actions { display: flex; gap: 4px; justify-content: flex-end; }
+.db-proj-actions .db-card-btn { opacity: 1; }
+
+/* Proje badge (task card içinde) */
+.db-proj-badge {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 1px 7px; border-radius: 20px;
+}
+.db-proj-blue   { background: #dbeafe; color: #1d4ed8; }
+.db-proj-green  { background: #dcfce7; color: #15803d; }
+.db-proj-orange { background: #fef3c7; color: #b45309; }
+.db-proj-purple { background: #ede9fe; color: #6d28d9; }
+.db-proj-red    { background: #fee2e2; color: #b91c1c; }
+
+body.dark-mode .db-proj-blue   { background: #1e3a5f; color: #93c5fd; }
+body.dark-mode .db-proj-green  { background: #14301e; color: #86efac; }
+body.dark-mode .db-proj-orange { background: #3d2a0a; color: #fcd34d; }
+body.dark-mode .db-proj-purple { background: #2e1a47; color: #c4b5fd; }
+body.dark-mode .db-proj-red    { background: #3d0f0f; color: #fca5a5; }
+
+/* Üye checkbox (proje drawer) */
+.db-member-check {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 8px; cursor: pointer;
+  border: 1.5px solid var(--border); font-size: 13px;
+  transition: all .15s; color: var(--text-secondary);
+}
+.db-member-check input { display: none; }
+.db-member-check.checked { border-color: var(--green-600); background: var(--green-50); color: var(--green-800); }
+.db-member-check:hover { border-color: var(--green-400); }
+
+/* ── GÖREVLERİM ──────────────────────────────── */
+.db-mytasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.db-mytask-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s, transform .2s;
+  border-left: 3px solid transparent;
+}
+.db-mytask-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.db-mytask-card[data-priority="high"] { border-left-color: #ef4444; }
+
+.db-mytask-desc {
+  font-size: 12.5px; color: var(--text-muted);
+  margin-bottom: 10px; line-height: 1.5;
+}
+
+.db-mytask-actions {
+  display: flex; gap: 8px; margin-top: 12px;
+  padding-top: 10px; border-top: 1px solid var(--border);
+}
+
+.db-mt-status {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .05em;
+  padding: 2px 8px; border-radius: 20px;
+}
+.db-mt-todo   { background: #f1f5f9; color: #64748b; }
+.db-mt-prog   { background: #fef3c7; color: #b45309; }
+.db-mt-done   { background: #dcfce7; color: #15803d; }
+
+/* ── TAKVİM ──────────────────────────────────── */
+.db-calendar {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.db-cal-daynames {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  background: var(--green-50);
+  border-bottom: 1px solid var(--border);
+}
+.db-cal-dayname {
+  text-align: center; padding: 10px 4px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.db-cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+}
+
+.db-cal-cell {
+  min-height: 100px; padding: 8px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  transition: background .15s;
+}
+.db-cal-cell:nth-child(7n) { border-right: none; }
+.db-cal-empty { background: var(--green-50); opacity: .4; }
+.db-cal-has-tasks { background: rgba(82,183,136,.04); }
+.db-cal-today {
+  border: 2px solid var(--green-600) !important;
+  background: rgba(82,183,136,.06);
+}
+
+.db-cal-day-num {
+  display: inline-block;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-muted); margin-bottom: 4px;
+}
+.today-num {
+  background: var(--green-700); color: #fff;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+
+.db-cal-task-dot {
+  font-size: 11px; color: var(--text-secondary);
+  padding: 2px 4px; border-radius: 3px;
+  background: var(--green-50);
+  margin-bottom: 3px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  transition: background .15s; cursor: default;
+}
+.db-cal-task-dot:hover { background: var(--green-100); }
+.db-cal-more { font-size: 10.5px; color: var(--text-muted); font-weight: 600; }
+
+/* ── ARŞİV ───────────────────────────────────── */
+.db-archive-table {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.db-archive-header {
+  display: grid;
+  grid-template-columns: 1fr 140px 120px 100px 160px;
+  padding: 10px 20px;
+  background: var(--green-50);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .07em; color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.db-archive-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 120px 100px 160px;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+  font-size: 13.5px; color: var(--text-secondary);
+}
+.db-archive-row:last-child { border-bottom: none; }
+.db-archive-row:hover { background: var(--green-50); }
+
+.db-archive-task { display: flex; align-items: center; gap: 10px; }
+.db-archive-check {
+  width: 22px; height: 22px; background: #dcfce7; color: #15803d;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.db-archive-title { font-weight: 600; color: var(--text-primary); font-size: 13.5px; }
+.db-archive-desc { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+.db-archive-date { font-size: 12.5px; color: var(--text-muted); }
+.db-archive-pm {}
+
+/* ── BİLDİRİMLER FULL ────────────────────────── */
+.db-notif-full-grid {
+  display: flex; flex-direction: column; gap: 0;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.db-notif-full-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background .15s;
+}
+.db-notif-full-row:last-child { border-bottom: none; }
+.db-notif-full-row:hover { background: var(--green-50); }
+.db-notif-full-row.unread { background: rgba(82,183,136,.04); }
+
+.db-unread-dot {
+  width: 8px; height: 8px; background: var(--green-600);
+  border-radius: 50%; flex-shrink: 0; margin-left: auto;
+}
+
+.db-notif-scroll { max-height: 320px; overflow-y: auto; }
+
+.db-dd-count {
+  background: var(--green-600); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 20px; margin-left: 4px;
+}
+
+/* Bildirim icon renkleri */
+.db-ni-green  { background: #dcfce7; color: #15803d; }
+.db-ni-blue   { background: #dbeafe; color: #1d4ed8; }
+.db-ni-orange { background: #fef3c7; color: #b45309; }
+.db-ni-purple { background: #ede9fe; color: #6d28d9; }
+
+body.dark-mode .db-ni-green  { background: #0d2416; color: #4ade80; }
+body.dark-mode .db-ni-blue   { background: #0d1a2a; color: #60a5fa; }
+body.dark-mode .db-ni-orange { background: #2a1d0d; color: #fbbf24; }
+body.dark-mode .db-ni-purple { background: #1a0d2a; color: #a78bfa; }
+
+/* ── BOŞ DURUM ───────────────────────────────── */
+.db-empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 64px 24px; gap: 12px;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.db-empty-state p { font-weight: 600; font-size: 15px; color: var(--text-secondary); }
+.db-empty-state span { font-size: 13px; color: var(--text-muted); text-align: center; }
+
+/* Drawer bildirim genişliği */
+.db-notif-dropdown { width: 320px; }
+
+/* Küçük düzeltme - dark mode mt-status */
+body.dark-mode .db-mt-todo   { background: #1e2d22; color: #8ab89a; }
+body.dark-mode .db-mt-prog   { background: #2a1d0d; color: #fcd34d; }
+body.dark-mode .db-mt-done   { background: #0d2416; color: #4ade80; }
+body.dark-mode .db-archive-check { background: #0d2416; color: #4ade80; }
+body.dark-mode .db-proj-table-header { background: #111c16; }
+body.dark-mode .db-cal-daynames { background: #111c16; }
+body.dark-mode .db-cal-empty { background: #111c16; }
+body.dark-mode .db-cal-task-dot { background: #152019; color: #8ab89a; }
+body.dark-mode .db-cal-task-dot:hover { background: #1e3024; }
+body.dark-mode .db-member-check { border-color: #253825; color: #8ab89a; }
+body.dark-mode .db-member-check.checked { background: #152019; border-color: var(--green-600); color: #4ade80; }
+/* ================================================
+   TAKVİM KONTROL STİLLERİ — priorvia.css sonuna ekle
+   ================================================ */
+
+.db-cal-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.db-cal-select {
+  padding: 8px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  min-width: 0;
+}
+
+#calMonthSelect { min-width: 100px; }
+#calYearSelect  { min-width: 72px; }
+
+.db-cal-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: 4px;
+}
+
+.db-cal-nav-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-white);
+  color: var(--text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.db-cal-nav-btn:hover {
+  background: var(--green-50);
+  border-color: var(--green-600);
+  color: var(--green-800);
+}
+
+body.dark-mode .db-cal-nav-btn {
+  background: #111c16;
+  border-color: #253825;
+  color: #8ab89a;
+}
+body.dark-mode .db-cal-nav-btn:hover {
+  background: #1a2a1d;
+  border-color: var(--green-600);
+  color: #4ade80;
+}
