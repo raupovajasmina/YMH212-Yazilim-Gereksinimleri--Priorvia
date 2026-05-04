@@ -74,12 +74,27 @@ function initThemeToggle() {
 
 /* ── USER INFO ────────────────────────────────── */
 function updateUserInfo() {
-  var initials = currentUser.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
-  setText('sidebarAvatar', initials);
-  setText('sidebarName', currentUser);
+  var profile = getMyProfile();
+  var displayName = profile.name || currentUser;
+  var ini = displayName.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+  setText('sidebarAvatar', ini);
+  setText('sidebarName', displayName);
   setText('sidebarRole', 'Proje Yöneticisi');
-  setText('topbarAvatar', initials);
-  setText('topbarName', currentUser.split(' ')[0]);
+  setText('topbarAvatar', ini);
+  setText('topbarName', displayName.split(' ')[0]);
+}
+
+function getMyProfile() {
+  return JSON.parse(localStorage.getItem('priorvia_myprofile') || 'null') || {
+    name: currentUser, email: '', phone: '', github: ''
+  };
+}
+
+function saveMyProfile(data) {
+  localStorage.setItem('priorvia_myprofile', JSON.stringify(data));
+  currentUser = data.name;
+  localStorage.setItem('priorvia_user', data.name);
+  updateUserInfo();
 }
 
 /* ── NAV VIEWS ────────────────────────────────── */
@@ -1010,11 +1025,13 @@ function closeInviteDrawer() {
   document.getElementById('dbOverlay').classList.remove('open');
 }
 function saveInvite() {
-  var name  = document.getElementById('inviteName').value.trim();
-  var email = document.getElementById('inviteEmail').value.trim();
-  var role  = document.getElementById('inviteRole').value;
+  var name   = document.getElementById('inviteName').value.trim();
+  var email  = document.getElementById('inviteEmail').value.trim();
+  var phone  = document.getElementById('invitePhone').value.trim();
+  var github = document.getElementById('inviteGithub').value.trim();
+  var role   = document.getElementById('inviteRole').value;
   if (!name) { alert('Ad Soyad zorunludur.'); return; }
-  var member = { id: Date.now().toString(), name: name, email: email, role: role, joinedAt: new Date().toISOString() };
+  var member = { id: Date.now().toString(), name: name, email: email, phone: phone, github: github, role: role, joinedAt: new Date().toISOString() };
   teamMembers.push(member);
   localStorage.setItem('priorvia_team', JSON.stringify(teamMembers));
   addActivity('"' + name + '" ekibe davet edildi', 'blue');
@@ -1045,7 +1062,8 @@ function renderTeam() {
     var ini = m.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
     var joined = new Date(m.joinedAt).toLocaleDateString('tr-TR', {day:'numeric',month:'short',year:'numeric'});
     html += '<tr><td><div class="db-member-cell"><div class="db-team-avatar">' + escHtml(ini) + '</div>' +
-      '<div><div class="db-member-name">' + escHtml(m.name) + '</div>' + (m.email?'<div class="db-member-email">'+escHtml(m.email)+'</div>':'') + '</div></div></td>' +
+      '<div><div class="db-member-name db-member-clickable" onclick="openMemberProfile(\'' + m.id + '\')" title="Profili Gör">' + escHtml(m.name) + '</div>' +
+      (m.email?'<div class="db-member-email">'+escHtml(m.email)+'</div>':'') + '</div></div></td>' +
       '<td><span class="db-role-badge ' + (roleCls[m.role]||'db-role-member') + '">' + (roleLabel[m.role]||m.role) + '</span></td>' +
       '<td>' + taskCount + ' görev</td><td>' + joined + '</td>' +
       '<td><button class="db-remove-btn" onclick="removeMember(\'' + m.id + '\')" title="Üyeyi Çıkar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></td></tr>';
@@ -1063,6 +1081,119 @@ function removeMember(id) {
   addActivity('"' + m.name + '" ekipten çıkarıldı', 'orange');
   renderTeam();
   showSaveBar('Üye çıkarıldı.');
+}
+
+/* ── PROFİL MODAL ─────────────────────────────── */
+var profileModalMode = 'view'; // 'view' | 'edit'
+
+function openMyProfile() {
+  var profile = getMyProfile();
+  var ini = profile.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+  var myTasks    = tasks.filter(function(t){ return t.assignee && t.assignee.toLowerCase() === profile.name.toLowerCase(); });
+  var myDone     = myTasks.filter(function(t){ return t.status === 'done'; }).length;
+  var myProjects = projects.filter(function(p){ return p.members && p.members.length > 0; }).length;
+
+  setText('prfModalTitle', 'Profilim');
+  setText('prfViewAvatar', ini); setText('prfEditAvatar', ini);
+  setText('prfViewName', profile.name);
+  setText('prfViewRole', 'Proje Yöneticisi');
+  setText('prfViewEmail', profile.email || 'Belirtilmedi');
+  setText('prfViewPhone', profile.phone || 'Belirtilmedi');
+  setText('prfStatTasks', myTasks.length);
+  setText('prfStatDone', myDone);
+  setText('prfStatProjects', myProjects);
+
+  var ghEl = document.getElementById('prfViewGithub');
+  if (ghEl) { ghEl.textContent = profile.github || 'Belirtilmedi'; ghEl.href = profile.github || '#'; }
+
+  document.getElementById('prfViewMode').style.display = '';
+  document.getElementById('prfEditMode').style.display = 'none';
+  document.getElementById('prfEditBtn').style.display  = '';
+  document.getElementById('prfEditBtn').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Düzenle';
+  document.getElementById('prfEditBtn').onclick = toggleProfileEdit;
+
+  profileModalMode = 'view';
+  document.getElementById('prfModal').classList.add('open');
+  document.getElementById('prfOverlay').classList.add('open');
+}
+
+function openMemberProfile(id) {
+  var m = teamMembers.find(function(x){ return x.id === id; });
+  if (!m) return;
+  var roleLabel = { pm:'Proje Yöneticisi', member:'Ekip Üyesi', viewer:'Görüntüleyici' };
+  var ini = m.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+  var mTasks    = tasks.filter(function(t){ return t.assignee && t.assignee.toLowerCase() === m.name.toLowerCase(); });
+  var mDone     = mTasks.filter(function(t){ return t.status === 'done'; }).length;
+  var mProjects = projects.filter(function(p){ return p.members && p.members.indexOf(m.id) !== -1; }).length;
+
+  setText('prfModalTitle', m.name + ' — Profil');
+  setText('prfViewAvatar', ini);
+  setText('prfViewName', m.name);
+  setText('prfViewRole', roleLabel[m.role] || m.role);
+  setText('prfViewEmail', m.email || 'Belirtilmedi');
+  setText('prfViewPhone', m.phone || 'Belirtilmedi');
+  setText('prfStatTasks', mTasks.length);
+  setText('prfStatDone', mDone);
+  setText('prfStatProjects', mProjects);
+
+  var ghEl = document.getElementById('prfViewGithub');
+  if (ghEl) { ghEl.textContent = m.github || 'Belirtilmedi'; ghEl.href = m.github || '#'; }
+
+  document.getElementById('prfViewMode').style.display = '';
+  document.getElementById('prfEditMode').style.display = 'none';
+  document.getElementById('prfEditBtn').style.display  = 'none'; // başkasının profili düzenlenemez
+
+  document.getElementById('prfModal').classList.add('open');
+  document.getElementById('prfOverlay').classList.add('open');
+}
+
+function toggleProfileEdit() {
+  var profile = getMyProfile();
+  var isEdit = document.getElementById('prfEditMode').style.display !== 'none';
+
+  if (!isEdit) {
+    // Görüntüleme → Düzenleme
+    document.getElementById('prfName').value   = profile.name   || '';
+    document.getElementById('prfEmail').value  = profile.email  || '';
+    document.getElementById('prfPhone').value  = profile.phone  || '';
+    document.getElementById('prfGithub').value = profile.github || '';
+    var ini = (profile.name||'').split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+    setText('prfEditAvatar', ini);
+    document.getElementById('prfViewMode').style.display = 'none';
+    document.getElementById('prfEditMode').style.display = '';
+    document.getElementById('prfEditBtn').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Kaydet';
+    document.getElementById('prfEditBtn').onclick = saveProfileFromModal;
+  }
+}
+
+function saveProfileFromModal() {
+  var name = document.getElementById('prfName').value.trim();
+  if (!name) { alert('Ad Soyad zorunludur.'); return; }
+  var data = {
+    name:   name,
+    email:  document.getElementById('prfEmail').value.trim(),
+    phone:  document.getElementById('prfPhone').value.trim(),
+    github: document.getElementById('prfGithub').value.trim()
+  };
+  saveMyProfile(data);
+  // Görüntüleme moduna dön
+  var ini = name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+  setText('prfViewAvatar', ini);
+  setText('prfViewName', name);
+  setText('prfViewEmail', data.email || 'Belirtilmedi');
+  setText('prfViewPhone', data.phone || 'Belirtilmedi');
+  var ghEl = document.getElementById('prfViewGithub');
+  if (ghEl) { ghEl.textContent = data.github || 'Belirtilmedi'; ghEl.href = data.github || '#'; }
+  document.getElementById('prfViewMode').style.display = '';
+  document.getElementById('prfEditMode').style.display = 'none';
+  document.getElementById('prfEditBtn').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Düzenle';
+  document.getElementById('prfEditBtn').onclick = toggleProfileEdit;
+  showSaveBar('Profil güncellendi.');
+}
+
+function closeProfileModal() {
+  document.getElementById('prfModal').classList.remove('open');
+  document.getElementById('prfOverlay').classList.remove('open');
 }
 
 /* ── WELCOME ──────────────────────────────────── */
@@ -1103,4 +1234,346 @@ function timeAgo(ts) {
   if (diff<3600000) return Math.floor(diff/60000)+' dk önce';
   if (diff<86400000) return Math.floor(diff/3600000)+' saat önce';
   return Math.floor(diff/86400000)+' gün önce';
+}
+/* ================================================
+   dashboard.js — PROFİLİM VIEW EKLEMELERİ
+   Bu kodları mevcut dashboard.js dosyanıza ekleyin
+   ================================================ */
+
+/* ── 1. showView FONKSİYONUNDA DEĞİŞİKLİK ────────
+   showView() içindeki allViewIds dizisine 'viewMyprofile' ekleyin:
+   
+   ÖNCE:
+   var allViewIds = ['viewDashboard','viewProjects','viewMyTasks','viewTeam','viewNotifications','viewCalendar','viewArchive'];
+   
+   SONRA:
+*/
+var allViewIds = ['viewDashboard','viewProjects','viewMyTasks','viewTeam','viewNotifications','viewCalendar','viewArchive','viewMyprofile'];
+
+/* ── showView labels objesine myprofile ekleyin ──
+   ÖNCE:
+   var labels = { dashboard: 'Dashboard', projects: 'Projeler', mytasks: 'Görevlerim',
+     team: 'Ekip & Yetkiler', notifications: 'Bildirimler', calendar: 'Takvim', archive: 'Arşiv' };
+   
+   SONRA:
+*/
+var labels = {
+  dashboard: 'Dashboard', projects: 'Projeler', mytasks: 'Görevlerim',
+  team: 'Ekip & Yetkiler', notifications: 'Bildirimler',
+  calendar: 'Takvim', archive: 'Arşiv', myprofile: 'Profilim'
+};
+
+/* ── showView viewMap objesine myprofile ekleyin ──
+   ÖNCE:
+   var viewMap = { dashboard: 'viewDashboard', projects: 'viewProjects', mytasks: 'viewMyTasks',
+     team: 'viewTeam', notifications: 'viewNotifications', calendar: 'viewCalendar', archive: 'viewArchive' };
+   
+   SONRA:
+*/
+var viewMap = {
+  dashboard: 'viewDashboard', projects: 'viewProjects', mytasks: 'viewMyTasks',
+  team: 'viewTeam', notifications: 'viewNotifications',
+  calendar: 'viewCalendar', archive: 'viewArchive', myprofile: 'viewMyprofile'
+};
+
+/* ── showView içinde render çağrılarına myprofile ekleyin ──
+   if (view === 'archive') renderArchive(); satırından SONRA şunu ekleyin:
+*/
+// if (view === 'myprofile')    renderMyProfile();
+
+/* ── 2. YENİ FONKSİYON: renderMyProfile ─────────
+   Bu fonksiyonu dosyanın herhangi bir yerine (örn. renderArchive'ın altına) ekleyin:
+*/
+function renderMyProfile() {
+  var container = document.getElementById('myProfileContent');
+  if (!container) return;
+
+  var profile = getMyProfile();
+  var ini = profile.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+  var myTasks    = tasks.filter(function(t){ return t.assignee && t.assignee.toLowerCase() === profile.name.toLowerCase(); });
+  var myDone     = myTasks.filter(function(t){ return t.status === 'done'; }).length;
+  var myInProg   = myTasks.filter(function(t){ return t.status === 'inprogress'; }).length;
+  var myProjects = projects.filter(function(p){ return p.members && p.members.length > 0; }).length;
+
+  container.innerHTML = [
+    '<div class="mprf-wrap">',
+
+    /* ── Sol Kart: Avatar + İstatistikler ── */
+    '<div class="mprf-left">',
+      '<div class="mprf-avatar-card">',
+        '<div class="mprf-big-avatar" id="mprfAvatar">', ini, '</div>',
+        '<div class="mprf-name" id="mprfNameDisp">', escHtml(profile.name), '</div>',
+        '<div class="mprf-role-tag">Proje Yöneticisi</div>',
+      '</div>',
+
+      '<div class="mprf-stats-card">',
+        '<div class="mprf-stat">',
+          '<div class="mprf-stat-val" id="mprfStatTotal">', myTasks.length, '</div>',
+          '<div class="mprf-stat-lbl">Toplam Görev</div>',
+        '</div>',
+        '<div class="mprf-stat-divider"></div>',
+        '<div class="mprf-stat">',
+          '<div class="mprf-stat-val" id="mprfStatDone">', myDone, '</div>',
+          '<div class="mprf-stat-lbl">Tamamlandı</div>',
+        '</div>',
+        '<div class="mprf-stat-divider"></div>',
+        '<div class="mprf-stat">',
+          '<div class="mprf-stat-val" id="mprfStatProg">', myInProg, '</div>',
+          '<div class="mprf-stat-lbl">Devam Ediyor</div>',
+        '</div>',
+      '</div>',
+
+      /* Aktif görevler özeti */
+      myTasks.length > 0 ? [
+        '<div class="mprf-recent-card">',
+          '<div class="mprf-sub-title">Son Görevlerim</div>',
+          myTasks.slice(0,4).map(function(t) {
+            var dot = { high:'#ef4444', med:'#f59e0b', low:'#22c55e' }[t.priority];
+            var stLbl = { todo:'Yapılacak', inprogress:'Devam', done:'Tamam' }[t.status];
+            return '<div class="mprf-task-row">' +
+              '<span class="mprf-task-dot" style="background:' + dot + '"></span>' +
+              '<span class="mprf-task-name">' + escHtml(t.title.substring(0,30)) + (t.title.length>30?'...':'') + '</span>' +
+              '<span class="mprf-task-st">' + stLbl + '</span>' +
+            '</div>';
+          }).join(''),
+        '</div>'
+      ].join('') : '',
+    '</div>',
+
+    /* ── Sağ Kart: Düzenlenebilir Form ── */
+    '<div class="mprf-right">',
+      '<div class="mprf-form-card">',
+        '<div class="mprf-form-header">',
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-700)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+          '<span>Profil Bilgileri</span>',
+        '</div>',
+
+        '<div class="mprf-form-body">',
+          '<div class="mprf-field-group">',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">Ad Soyad <span style="color:#e53e3e">*</span></label>',
+              '<input type="text" id="mprfName" class="db-input" value="', escHtml(profile.name), '" placeholder="Ad Soyad" />',
+            '</div>',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">E-posta</label>',
+              '<div class="mprf-input-icon">',
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+                '<input type="email" id="mprfEmail" class="db-input mprf-with-icon" value="', escHtml(profile.email || ''), '" placeholder="ornek@email.com" />',
+              '</div>',
+            '</div>',
+          '</div>',
+
+          '<div class="mprf-field-group">',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">Telefon</label>',
+              '<div class="mprf-input-icon">',
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16h.27Z"/></svg>',
+                '<input type="tel" id="mprfPhone" class="db-input mprf-with-icon" value="', escHtml(profile.phone || ''), '" placeholder="+90 555 000 00 00" />',
+              '</div>',
+            '</div>',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">GitHub</label>',
+              '<div class="mprf-input-icon">',
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>',
+                '<input type="url" id="mprfGithub" class="db-input mprf-with-icon" value="', escHtml(profile.github || ''), '" placeholder="https://github.com/kullaniciadi" />',
+              '</div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        '<div class="mprf-form-footer">',
+          '<button class="btn-ghost" onclick="renderMyProfile()">',
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.93"/></svg>',
+            'Sıfırla',
+          '</button>',
+          '<button class="btn-primary" onclick="saveMyProfileFromView()">',
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+            'Değişiklikleri Kaydet',
+          '</button>',
+        '</div>',
+      '</div>',
+
+      /* Güvenlik / Hesap bilgisi kartı */
+      '<div class="mprf-info-card">',
+        '<div class="mprf-sub-title" style="margin-bottom:12px">',
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+          'Hesap Bilgileri',
+        '</div>',
+        '<div class="mprf-info-row">',
+          '<span class="mprf-info-key">Kullanıcı Adı</span>',
+          '<span class="mprf-info-val" id="mprfInfoName">', escHtml(profile.name), '</span>',
+        '</div>',
+        profile.email ? [
+          '<div class="mprf-info-row">',
+            '<span class="mprf-info-key">E-posta</span>',
+            '<span class="mprf-info-val">', escHtml(profile.email), '</span>',
+          '</div>'
+        ].join('') : '',
+        '<div class="mprf-info-row">',
+          '<span class="mprf-info-key">Rol</span>',
+          '<span class="db-role-badge db-role-pm">Proje Yöneticisi</span>',
+        '</div>',
+        '<div class="mprf-info-row">',
+          '<span class="mprf-info-key">Atanan Görevler</span>',
+          '<span class="mprf-info-val">', myTasks.length, ' görev</span>',
+        '</div>',
+      '</div>',
+    '</div>',
+
+    '</div>' /* /mprf-wrap */
+  ].join('');
+}
+
+/* ── 3. YENİ FONKSİYON: saveMyProfileFromView ───
+   Bu fonksiyonu da ekleyin:
+*/
+function saveMyProfileFromView() {
+  var name = document.getElementById('mprfName').value.trim();
+  if (!name) { alert('Ad Soyad zorunludur.'); return; }
+  var data = {
+    name:   name,
+    email:  document.getElementById('mprfEmail').value.trim(),
+    phone:  document.getElementById('mprfPhone').value.trim(),
+    github: document.getElementById('mprfGithub').value.trim()
+  };
+  saveMyProfile(data);
+  renderMyProfile();
+  showSaveBar('Profil güncellendi.');
+}
+
+/* ── 4. showView FONKSİYONUNDA son kontrol ───────
+   showView() içindeki if/render bloğuna şunu ekleyin:
+   
+   if (view === 'myprofile') renderMyProfile();
+   
+   Bu satırı:
+   if (view === 'archive') renderArchive();
+   satırından HEMEN SONRA ekleyin.
+*/
+/* ================================================
+   /* ================================================
+   dashboard.js — showView FONKSİYONUNU TAMAMEN
+   BU KOD İLE DEĞİŞTİRİN (eski showView silin)
+   ================================================ */
+
+function showView(view) {
+  document.querySelectorAll('.db-drawer').forEach(function(d){ d.classList.remove('open'); });
+  document.getElementById('dbOverlay').classList.remove('open');
+  editId = null;
+
+  var allViewIds = [
+    'viewDashboard','viewProjects','viewMyTasks','viewTeam',
+    'viewNotifications','viewCalendar','viewArchive','viewMyprofile'
+  ];
+  allViewIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  document.querySelectorAll('.db-nav-item').forEach(function(i){ i.classList.remove('active'); });
+  var navEl = document.querySelector('.db-nav-item[data-view="' + view + '"]');
+  if (navEl) navEl.classList.add('active');
+
+  var labels = {
+    dashboard:   'Dashboard',
+    projects:    'Projeler',
+    mytasks:     'Görevlerim',
+    team:        'Ekip & Yetkiler',
+    notifications: 'Bildirimler',
+    calendar:    'Takvim',
+    archive:     'Arşiv',
+    myprofile:   'Profilim'
+  };
+  setText('breadcrumbCurrent', labels[view] || view);
+
+  var viewMap = {
+    dashboard:     'viewDashboard',
+    projects:      'viewProjects',
+    mytasks:       'viewMyTasks',
+    team:          'viewTeam',
+    notifications: 'viewNotifications',
+    calendar:      'viewCalendar',
+    archive:       'viewArchive',
+    myprofile:     'viewMyprofile'
+  };
+  var el = document.getElementById(viewMap[view]);
+  if (el) el.style.display = '';
+
+  if (view === 'projects')      renderProjects();
+  if (view === 'mytasks')       renderMyTasks();
+  if (view === 'team')          renderTeam();
+  if (view === 'notifications') renderNotificationsFull();
+  if (view === 'calendar')      renderCalendar();
+  if (view === 'archive')       renderArchive();
+  if (view === 'myprofile')     renderMyProfile();   /* ← YENİ */
+}
+
+
+/* ================================================
+   renderMyProfile — Listeyi ve formu doldurur
+   Bu fonksiyon yoksa dashboard.js'e EKLE
+   ================================================ */
+
+function renderMyProfile() {
+  var profile = getMyProfile();
+  var ini = profile.name
+    .split(' ')
+    .map(function(w){ return w[0] || ''; })
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  /* Avatar & başlık */
+  setText('mprfAvatarDisp', ini || '?');
+  setText('mprfNameDisp',   profile.name  || '—');
+
+  /* Bilgi listesi */
+  setText('mprfListName',  profile.name  || '—');
+  setText('mprfListEmail', profile.email || '—');
+  setText('mprfListPhone', profile.phone || '—');
+
+  var ghEl = document.getElementById('mprfListGithub');
+  if (ghEl) {
+    if (profile.github) {
+      ghEl.textContent = profile.github;
+      ghEl.href        = profile.github;
+    } else {
+      ghEl.textContent = '—';
+      ghEl.href        = '#';
+    }
+  }
+
+  /* Formu doldur */
+  var f = function(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.value = val || '';
+  };
+  f('mprfName',   profile.name);
+  f('mprfEmail',  profile.email);
+  f('mprfPhone',  profile.phone);
+  f('mprfGithub', profile.github);
+}
+
+
+/* ================================================
+   saveMyProfileFromView — Formu kaydeder
+   Bu fonksiyon yoksa dashboard.js'e EKLE
+   ================================================ */
+
+function saveMyProfileFromView() {
+  var nameEl = document.getElementById('mprfName');
+  if (!nameEl) return;
+  var name = nameEl.value.trim();
+  if (!name) { alert('Ad Soyad zorunludur.'); return; }
+
+  var data = {
+    name:   name,
+    email:  (document.getElementById('mprfEmail')  || {}).value || '',
+    phone:  (document.getElementById('mprfPhone')  || {}).value || '',
+    github: (document.getElementById('mprfGithub') || {}).value || ''
+  };
+
+  saveMyProfile(data);   /* mevcut fonksiyon — localStorage + sidebar günceller */
+  renderMyProfile();     /* listeyi ve formu yenile */
+  showSaveBar('Profil güncellendi.');
 }

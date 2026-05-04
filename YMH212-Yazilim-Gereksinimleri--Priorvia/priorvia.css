@@ -1404,3 +1404,606 @@ body.dark-mode .db-cal-nav-btn:hover {
   border-color: var(--green-600);
   color: #4ade80;
 }
+/* ================================================
+   TAKVİM KONTROL STİLLERİ — priorvia.css sonuna ekle
+   ================================================ */
+
+.db-cal-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.db-cal-select {
+  padding: 8px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  min-width: 0;
+}
+
+#calMonthSelect { min-width: 100px; }
+#calYearSelect  { min-width: 72px; }
+
+.db-cal-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: 4px;
+}
+
+.db-cal-nav-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-white);
+  color: var(--text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.db-cal-nav-btn:hover {
+  background: var(--green-50);
+  border-color: var(--green-600);
+  color: var(--green-800);
+}
+
+body.dark-mode .db-cal-nav-btn {
+  background: #111c16;
+  border-color: #253825;
+  color: #8ab89a;
+}
+body.dark-mode .db-cal-nav-btn:hover {
+  background: #1a2a1d;
+  border-color: var(--green-600);
+  color: #4ade80;
+}
+
+/* ================================================
+   PROFİL MODAL STİLLERİ — priorvia.css sonuna ekle
+   ================================================ */
+
+.prf-overlay {
+  position: fixed; inset: 0;
+  background: rgba(13,31,23,.5); backdrop-filter: blur(5px);
+  z-index: 600; opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.prf-overlay.open { opacity: 1; pointer-events: all; }
+
+.prf-modal {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -46%) scale(.97);
+  width: 420px; max-width: calc(100vw - 32px);
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  z-index: 700;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s, transform .25s;
+}
+.prf-modal.open {
+  opacity: 1; pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.prf-modal-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+}
+.prf-modal-hd h3 {
+  font-family: var(--font-display); font-size: 1.05rem;
+  font-weight: 700; color: var(--text-primary);
+}
+.prf-close-btn {
+  width: 32px; height: 32px; background: var(--green-50);
+  border: none; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); transition: background .15s;
+}
+.prf-close-btn:hover { background: var(--green-100); color: var(--green-800); }
+
+.prf-modal-body {
+  padding: 24px; display: flex; flex-direction: column; gap: 16px;
+  overflow-y: auto; max-height: 60vh;
+}
+
+.prf-avatar-row {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 4px;
+}
+.prf-big-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--green-700); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; flex-shrink: 0;
+}
+.prf-view-name {
+  font-family: var(--font-display); font-size: 1.15rem;
+  font-weight: 700; color: var(--text-primary);
+}
+.prf-view-role {
+  font-size: 12.5px; color: var(--text-muted); margin-top: 2px;
+}
+
+.prf-info-grid {
+  display: flex; flex-direction: column; gap: 10px;
+  background: var(--green-50); border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+.prf-info-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; color: var(--text-secondary);
+}
+.prf-info-item svg { flex-shrink: 0; color: var(--text-muted); }
+.prf-info-item a { color: var(--green-700); text-decoration: underline; }
+.prf-info-item a:hover { color: var(--green-900); }
+
+.prf-view-stats {
+  display: flex; gap: 0;
+  background: var(--bg-white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); overflow: hidden;
+}
+.prf-stat {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; padding: 14px 8px;
+  border-right: 1px solid var(--border);
+}
+.prf-stat:last-child { border-right: none; }
+.prf-stat span {
+  font-family: var(--font-display); font-size: 1.4rem;
+  font-weight: 700; color: var(--green-800); line-height: 1;
+}
+.prf-stat small {
+  font-size: 11px; color: var(--text-muted); margin-top: 4px;
+}
+
+.prf-modal-ft {
+  padding: 14px 24px; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+
+/* Üye ismine tıklanabilir stil */
+.db-member-clickable {
+  cursor: pointer; transition: color .15s;
+}
+.db-member-clickable:hover { color: var(--green-700); text-decoration: underline; }
+
+/* Sidebar hover efekti */
+.db-sidebar-user:hover { background: rgba(255,255,255,.06); }
+
+/* Dark mode */
+body.dark-mode .prf-modal { background: #182118; }
+body.dark-mode .prf-info-grid { background: #111c16; }
+body.dark-mode .prf-view-stats { background: #1e2d22; border-color: #253825; }
+body.dark-mode .prf-stat { border-color: #253825; }
+body.dark-mode .prf-stat span { color: #4ade80; }
+body.dark-mode .prf-close-btn { background: #111c16; }
+body.dark-mode .prf-close-btn:hover { background: #1a2a1d; }
+/* ================================================
+   PROFİLİM VIEW STİLLERİ — priorvia.css sonuna ekleyin
+   ================================================ */
+
+/* ── Layout ──────────────────────────────────── */
+.mprf-wrap {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .mprf-wrap { grid-template-columns: 1fr; }
+}
+
+/* ── Sol Sütun ───────────────────────────────── */
+.mprf-left { display: flex; flex-direction: column; gap: 16px; }
+
+/* Avatar Kartı */
+.mprf-avatar-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.mprf-big-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-700), var(--green-900));
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 700;
+  font-family: var(--font-display);
+  margin: 0 auto 14px;
+  box-shadow: 0 4px 16px rgba(45,106,79,0.3);
+}
+
+.mprf-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.mprf-role-tag {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* İstatistik Kartı */
+.mprf-stats-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  align-items: stretch;
+  box-shadow: var(--shadow-sm);
+}
+
+.mprf-stat {
+  flex: 1;
+  text-align: center;
+  padding: 8px 4px;
+}
+
+.mprf-stat-divider {
+  width: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.mprf-stat-val {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green-800);
+  line-height: 1;
+}
+
+.mprf-stat-lbl {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Son Görevler Kartı */
+.mprf-recent-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.mprf-sub-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.mprf-task-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+.mprf-task-row:last-child { border-bottom: none; }
+
+.mprf-task-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%; flex-shrink: 0;
+}
+
+.mprf-task-name {
+  flex: 1;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mprf-task-st {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--green-50);
+  padding: 1px 7px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* ── Sağ Sütun ───────────────────────────────── */
+.mprf-right { display: flex; flex-direction: column; gap: 16px; }
+
+/* Form Kartı */
+.mprf-form-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.mprf-form-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: var(--green-50);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.mprf-form-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mprf-field-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .mprf-field-group { grid-template-columns: 1fr; }
+}
+
+.mprf-field { display: flex; flex-direction: column; gap: 5px; }
+
+.mprf-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mprf-input-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.mprf-input-icon svg {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+.mprf-with-icon { padding-left: 36px !important; }
+
+.mprf-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--green-50);
+}
+
+/* Hesap Bilgileri Kartı */
+.mprf-info-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.mprf-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.mprf-info-row:last-child { border-bottom: none; }
+
+.mprf-info-key {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.mprf-info-val {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ── Dark Mode ───────────────────────────────── */
+body.dark-mode .mprf-avatar-card,
+body.dark-mode .mprf-stats-card,
+body.dark-mode .mprf-recent-card,
+body.dark-mode .mprf-form-card,
+body.dark-mode .mprf-info-card {
+  background: #1e2d22;
+  border-color: #253825;
+}
+
+body.dark-mode .mprf-form-header,
+body.dark-mode .mprf-form-footer {
+  background: #111c16;
+  border-color: #253825;
+}
+
+body.dark-mode .mprf-stat-divider { background: #253825; }
+body.dark-mode .mprf-task-row { border-color: #253825; }
+body.dark-mode .mprf-info-row { border-color: #253825; }
+body.dark-mode .mprf-stat-val { color: #4ade80; }
+body.dark-mode .mprf-task-st { background: #152019; color: #8ab89a; }
+body.dark-mode .mprf-role-tag { background: #1e3a5f; color: #93c5fd; }
+/* ================================================
+   PROFİLİM VIEW STİLLERİ — priorvia.css sonuna ekleyin
+   ================================================ */
+
+/* ── Ana layout: sol liste | sağ form ────────── */
+.mprf-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .mprf-layout { grid-template-columns: 1fr; }
+}
+
+/* ── Sol panel ───────────────────────────────── */
+.mprf-info-panel {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Avatar + isim */
+.mprf-avatar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 20px;
+  background: var(--green-50);
+  border-bottom: 1px solid var(--border);
+}
+.mprf-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-700), var(--green-900));
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(45,106,79,.25);
+}
+.mprf-fullname {
+  font-family: var(--font-display);
+  font-size: 1rem; font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.mprf-badge {
+  display: inline-block;
+  background: #dbeafe; color: #1d4ed8;
+  font-size: 10.5px; font-weight: 600;
+  padding: 2px 9px; border-radius: 20px;
+}
+
+/* Bilgi listesi */
+.mprf-list {
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.mprf-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+}
+.mprf-list-item:last-child { border-bottom: none; }
+.mprf-list-item:hover { background: var(--green-50); }
+
+.mprf-list-icon {
+  width: 32px; height: 32px;
+  background: var(--green-100);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green-700);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.mprf-list-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+.mprf-list-val {
+  font-size: 13.5px; font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+.mprf-list-link {
+  color: var(--green-700);
+  text-decoration: underline;
+  font-weight: 500;
+}
+.mprf-list-link:hover { color: var(--green-900); }
+
+/* ── Sağ panel: Form ─────────────────────────── */
+.mprf-form-panel {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.mprf-form-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 22px;
+  background: var(--green-50);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  color: var(--text-primary);
+}
+
+.mprf-form-body {
+  padding: 22px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.mprf-label {
+  font-size: 12.5px; font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mprf-form-foot {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--border);
+  background: var(--green-50);
+}
+
+/* ── Dark mode ───────────────────────────────── */
+body.dark-mode .mprf-info-panel,
+body.dark-mode .mprf-form-panel      { background: #1e2d22; border-color: #253825; }
+body.dark-mode .mprf-avatar-wrap,
+body.dark-mode .mprf-form-head,
+body.dark-mode .mprf-form-foot       { background: #111c16; border-color: #253825; }
+body.dark-mode .mprf-list-item:hover { background: #1a2a1d; }
+body.dark-mode .mprf-list-item       { border-color: #253825; }
+body.dark-mode .mprf-list-icon       { background: #152019; color: #4ade80; }
+body.dark-mode .mprf-badge           { background: #1e3a5f; color: #93c5fd; }
+body.dark-mode .mprf-list-link       { color: #4ade80; }
