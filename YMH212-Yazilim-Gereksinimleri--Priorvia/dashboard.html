@@ -1126,22 +1126,30 @@
     <span id="saveBarMsg">Değişiklikler kaydedildi.</span>
   </div>
 
-  <!-- ===== REVIEW MODAL ===== -->
+ <!-- ===== REVIEW MODAL ===== -->
   <div class="prf-overlay" id="reviewOverlay" onclick="closeReviewModal()"></div>
-  <div class="prf-modal" id="reviewModal" style="max-width:520px">
+  <div class="prf-modal" id="reviewModal" style="max-width:540px">
     <div class="prf-modal-hd">
-      <h3>Görev Detayı & Review</h3>
+      <h3>Görev Detayı &amp; Review</h3>
       <button class="prf-close-btn" onclick="closeReviewModal()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="prf-modal-body" style="gap:14px">
+
+      <!-- Öncelik + Durum -->
       <div class="rv-header">
         <span class="priority-tag" id="rvPriority">ORTA</span>
         <span class="db-mt-status" id="rvStatus">Tamamlandı</span>
       </div>
+
+      <!-- Başlık -->
       <div class="rv-title" id="rvTitle">—</div>
+
+      <!-- Açıklama -->
       <div class="rv-desc" id="rvDesc" style="display:none"></div>
+
+      <!-- Meta bilgiler -->
       <div class="rv-meta-grid">
         <div class="rv-meta-item">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1160,10 +1168,44 @@
           <span id="rvProgress">—</span>
         </div>
       </div>
+
+      <!-- Mevcut yorumlar -->
+      <div class="rv-comments-section">
+        <div class="rv-comments-hd">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green-700)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Yorumlar
+          <span class="rv-comment-count" id="rvCommentCount">0</span>
+        </div>
+        <div class="rv-comments-list" id="rvCommentsList">
+          <p class="db-empty-sm">Henüz yorum yok.</p>
+        </div>
+      </div>
+
+      <!-- Yorum ekle -->
+      <div class="rv-add-comment">
+        <div class="rv-comment-avatar" id="rvMyAvatar">İS</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+          <textarea
+            id="rvCommentInput"
+            class="db-input"
+            placeholder="Yorum ekle... (görev sahibine bildirim gider)"
+            style="min-height:72px;resize:vertical;font-size:13px"
+          ></textarea>
+          <div style="display:flex;justify-content:flex-end">
+            <button class="btn-primary" style="padding:8px 16px;font-size:13px" onclick="submitReviewComment()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Yorum Gönder
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="rv-divider"></div>
+
+      <!-- Alt butonlar -->
       <div class="rv-action-row">
         <button class="btn-ghost" onclick="closeReviewModal()">Kapat</button>
-        <button class="btn-primary" id="rvEditBtn" onclick="closeReviewModal()">
+        <button class="btn-primary" id="rvEditBtn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           Düzenle
         </button>
@@ -1172,6 +1214,7 @@
           Arşivle (PM)
         </button>
       </div>
+
     </div>
   </div>
 

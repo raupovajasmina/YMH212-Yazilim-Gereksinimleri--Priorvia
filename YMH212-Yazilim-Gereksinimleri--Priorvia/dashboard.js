@@ -679,51 +679,161 @@ function renderProjects() {
   list.innerHTML = html;
 }
 
-/* ── MY TASKS ─────────────────────────────────── */
 function renderMyTasks() {
   var list = document.getElementById('myTasksList');
   if (!list) return;
 
+  /* ── 1. Filtrele: sadece bana atanan görevler ── */
+  var profile = getMyProfile();
+  var myName  = (profile.name || currentUser).toLowerCase().trim();
+
   var myTasks = tasks.filter(function(t) {
-    return t.assignee && t.assignee.toLowerCase() === currentUser.toLowerCase();
+    return t.assignee && t.assignee.toLowerCase().trim() === myName;
   });
 
   setText('myTaskCount', myTasks.length);
 
   if (myTasks.length === 0) {
-    list.innerHTML = '<div class="db-empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>Size atanan görev yok.</p><span>Atanan kişi olarak adınızı kullandığınızda görevler burada görünür.</span></div>';
+    list.innerHTML = '<div class="db-empty-state">' +
+      '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>' +
+      '<p>Size atanan görev yok.</p>' +
+      '<span>Atanan kişi olarak "' + escHtml(profile.name || currentUser) + '" seçildiğinde görevler burada görünür.</span>' +
+    '</div>';
     return;
   }
 
-  var statusOrder = { todo: 0, inprogress: 1, done: 2 };
-  myTasks.sort(function(a,b){ return statusOrder[a.status] - statusOrder[b.status]; });
+  /* ── 2. Akıllı sıralama ──────────────────────
+     Kural 1 — Durum: aktif görevler önce (done en sona)
+     Kural 2 — Tarih: teslim tarihi en yakın olan üstte
+                      tarihi olmayanlar en sona
+     Kural 3 — Öncelik: aynı tarihte Acil>Yüksek>Orta>Düşük
+  ─────────────────────────────────────────────── */
+  var priorityOrder = { urgent: 0, high: 1, med: 2, low: 3 };
+  var statusOrder   = { todo: 0, inprogress: 0, pending_approval: 1, done: 2 };
+  var BIG = 99999999999999; /* tarihi olmayanlar için büyük sayı */
+
+  myTasks.sort(function(a, b) {
+    /* Önce durum grubu */
+    var sDiff = (statusOrder[a.status] || 0) - (statusOrder[b.status] || 0);
+    if (sDiff !== 0) return sDiff;
+
+    /* Sonra tarih */
+    var aDate = a.date ? new Date(a.date).getTime() : BIG;
+    var bDate = b.date ? new Date(b.date).getTime() : BIG;
+    if (aDate !== bDate) return aDate - bDate;
+
+    /* Aynı tarihse öncelik */
+    var aPri = priorityOrder[a.priority] !== undefined ? priorityOrder[a.priority] : 99;
+    var bPri = priorityOrder[b.priority] !== undefined ? priorityOrder[b.priority] : 99;
+    return aPri - bPri;
+  });
+
+  /* ── 3. Render ───────────────────────────────── */
+  var today    = new Date(); today.setHours(0, 0, 0, 0);
+  var tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
 
   var html = '<div class="db-mytasks-grid">';
-  myTasks.forEach(function(task) {
-    var proj = projects.find(function(p){ return p.id === task.projectId; });
-    var pLabel = { high:'YÜKSEK', med:'ORTA', low:'DÜŞÜK' }[task.priority] || '';
-    var statusLabel = { todo:'Yapılacak', inprogress:'Devam Ediyor', done:'Tamamlandı' }[task.status] || '';
-    var statusCls = { todo:'mt-todo', inprogress:'mt-prog', done:'mt-done' }[task.status] || '';
-    var today = new Date(); today.setHours(0,0,0,0);
-    var isOverdue = task.date && new Date(task.date) < today && task.status !== 'done';
 
-    html += '<div class="db-mytask-card' + (task.status==='done'?' db-card-done':'') + '">' +
+  /* Sıralama bilgisi başlık */
+  html += '<div class="db-mytasks-sort-info">' +
+    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>' +
+    myTasks.length + ' görev  ' +
+  '</div>';
+
+  myTasks.forEach(function(task) {
+    var proj      = projects.find(function(p){ return p.id === task.projectId; });
+    var pLabel    = { urgent:'ACİL', high:'YÜKSEK', med:'ORTA', low:'DÜŞÜK' }[task.priority] || 'ORTA';
+    var statusLabel = {
+      todo:             'Yapılacak',
+      inprogress:       'Devam Ediyor',
+      done:             'Tamamlandı',
+      pending_approval: 'PM Onayı Bekliyor'
+    }[task.status] || task.status;
+    var statusCls = {
+      todo:             'db-mt-todo',
+      inprogress:       'db-mt-prog',
+      done:             'db-mt-done',
+      pending_approval: 'db-mt-pending'
+    }[task.status] || 'db-mt-todo';
+
+    /* Tarih durumu */
+    var dateHtml   = '';
+    var isOverdue  = false;
+    var isToday    = false;
+    var isTomorrow = false;
+
+    if (task.date) {
+      var d = new Date(task.date); d.setHours(0, 0, 0, 0);
+      isOverdue  = d < today  && task.status !== 'done';
+      isToday    = d.getTime() === today.getTime();
+      isTomorrow = d.getTime() === tomorrow.getTime();
+
+      var dateLabel = isOverdue  ? '⚠ Gecikmiş — ' + formatDate(d) :
+                      isToday    ? '🔴 Bugün teslim' :
+                      isTomorrow ? '🟡 Yarın teslim' :
+                      formatDate(d);
+
+      dateHtml = '<span class="db-card-date' + (isOverdue ? ' overdue' : isToday ? ' today-due' : '') + '">' +
+        '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
+        dateLabel + '</span>';
+    } else {
+      dateHtml = '<span style="font-size:11.5px;color:var(--text-muted)">Tarih belirlenmedi</span>';
+    }
+
+    /* Kart renk kenar — önceliğe göre */
+    var borderColor = { urgent:'#dc2626', high:'#ef4444', med:'#f59e0b', low:'var(--green-600)' }[task.priority] || 'transparent';
+
+    html += '<div class="db-mytask-card' + (task.status === 'done' ? ' db-card-done' : '') + '" style="border-left-color:' + borderColor + '">' +
+
+      /* Üst satır: öncelik + durum */
       '<div class="db-card-top">' +
         '<span class="priority-tag ' + task.priority + '">' + pLabel + '</span>' +
         '<span class="db-mt-status ' + statusCls + '">' + statusLabel + '</span>' +
       '</div>' +
-      '<div class="db-card-title">' + escHtml(task.title) + '</div>' +
-      (task.desc ? '<div class="db-mytask-desc">' + escHtml(task.desc.substring(0,80)) + (task.desc.length>80?'...':'') + '</div>' : '') +
-      '<div class="db-card-meta">' +
-        (task.date ? '<span class="db-card-date' + (isOverdue?' overdue':'') + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDate(new Date(task.date)) + (isOverdue?' ⚠':'') + '</span>' : '') +
+
+      /* Başlık */
+      '<div class="db-card-title" style="margin:8px 0">' + escHtml(task.title) + '</div>' +
+
+      /* Açıklama */
+      (task.desc ? '<div class="db-mytask-desc">' + escHtml(task.desc.substring(0, 100)) + (task.desc.length > 100 ? '...' : '') + '</div>' : '') +
+
+      /* İlerleme barı (devam ediyorsa) */
+      (task.status === 'inprogress' && task.progress > 0
+        ? '<div class="db-card-progress" style="margin-bottom:8px">' +
+            '<div class="db-card-prog-bar"><div class="db-card-prog-fill" style="width:' + task.progress + '%"></div></div>' +
+            '<span class="db-card-prog-label">%' + task.progress + '</span>' +
+          '</div>'
+        : '') +
+
+      /* Meta: tarih + proje */
+      '<div class="db-card-meta" style="margin-top:6px;flex-wrap:wrap;gap:6px">' +
+        dateHtml +
         (proj ? '<span class="db-proj-badge db-proj-' + proj.color + '">' + escHtml(proj.name) + '</span>' : '') +
       '</div>' +
+
+      /* Aksiyon butonları */
       '<div class="db-mytask-actions">' +
-        '<button class="db-card-btn" onclick="openEditDrawer(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Düzenle</button>' +
-        (task.status === 'done' ? '<button class="btn-ghost" style="font-size:12px;padding:5px 10px" onclick="archiveTask(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg> Arşivle (PM)</button>' : '') +
+        '<button class="db-card-btn" style="opacity:1" onclick="openEditDrawer(\'' + task.id + '\')">' +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+          ' Düzenle' +
+        '</button>' +
+        (task.status === 'done'
+          ? '<button class="db-card-btn" style="opacity:1" onclick="openReviewModal(\'' + task.id + '\')">' +
+              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' +
+              ' Review' +
+            '</button>'
+          : '') +
+        (task.status === 'done'
+          ? '<button class="btn-ghost" style="font-size:12px;padding:5px 10px" onclick="archiveTask(\'' + task.id + '\')">' +
+              '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg>' +
+              ' Arşivle (PM)' +
+            '</button>'
+          : '') +
       '</div>' +
+
     '</div>';
   });
+
   html += '</div>';
   list.innerHTML = html;
 }
@@ -1887,7 +1997,6 @@ function updateDashStats() {
   setText('chartProjLabel', proj ? proj.name : 'Tüm Projeler');
 }
 
-/* ── REVIEW MODAL ───────────────────────────────── */
 function openReviewModal(taskId) {
   var task = tasks.find(function(t){ return t.id === taskId; });
   if (!task) return;
@@ -1903,19 +2012,11 @@ function openReviewModal(taskId) {
   };
   var proj = projects.find(function(p){ return p.id === task.projectId; });
 
-  /* Priority tag */
+  /* Priority + status */
   var prEl = document.getElementById('rvPriority');
-  if (prEl) {
-    prEl.textContent = pLabel;
-    prEl.className   = 'priority-tag ' + task.priority;
-  }
-
-  /* Status badge */
+  if (prEl) { prEl.textContent = pLabel; prEl.className = 'priority-tag ' + task.priority; }
   var stEl = document.getElementById('rvStatus');
-  if (stEl) {
-    stEl.textContent = statusMap[task.status] || task.status;
-    stEl.className   = 'db-mt-status ' + (statusCls[task.status] || 'db-mt-done');
-  }
+  if (stEl) { stEl.textContent = statusMap[task.status] || task.status; stEl.className = 'db-mt-status ' + (statusCls[task.status] || 'db-mt-done'); }
 
   setText('rvTitle',    task.title);
   setText('rvAssignee', task.assignee || 'Atanmadı');
@@ -1925,28 +2026,39 @@ function openReviewModal(taskId) {
 
   var descEl = document.getElementById('rvDesc');
   if (descEl) {
-    if (task.desc) {
-      descEl.textContent = task.desc;
-      descEl.style.display = '';
-    } else {
-      descEl.style.display = 'none';
-    }
+    if (task.desc) { descEl.textContent = task.desc; descEl.style.display = ''; }
+    else { descEl.style.display = 'none'; }
   }
+
+  /* Avatar */
+  var profile = getMyProfile();
+  var ini = (profile.name || currentUser).split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+  setText('rvMyAvatar', ini);
+
+  /* Yorum alanını temizle */
+  var inp = document.getElementById('rvCommentInput');
+  if (inp) inp.value = '';
+
+  /* Mevcut yorumları yükle */
+  renderReviewComments(task.id);
 
   /* Butonlara task id bağla */
   var editBtn = document.getElementById('rvEditBtn');
   if (editBtn) editBtn.onclick = function() { closeReviewModal(); openEditDrawer(task.id); };
-
   var archBtn = document.getElementById('rvArchiveBtn');
   if (archBtn) {
     archBtn.style.display = task.status === 'done' ? '' : 'none';
     archBtn.onclick = function() { closeReviewModal(); archiveTask(task.id); };
   }
 
+  /* Modal'ı aç */
   document.getElementById('reviewModal').classList.add('open');
   document.getElementById('reviewOverlay').classList.add('open');
-}
 
+  /* Bildirim gönder — review açıldı */
+  var reviewerName = profile.name || currentUser;
+  addNotif('"' + task.title + '" görevi ' + reviewerName + ' tarafından incelendi', 'update');
+}
 function closeReviewModal() {
   document.getElementById('reviewModal').classList.remove('open');
   document.getElementById('reviewOverlay').classList.remove('open');
@@ -2171,4 +2283,96 @@ if (_origThemeToggle) {
   _origThemeToggle.addEventListener('click', function() {
     setTimeout(renderDashChart, 300);
   });
+}
+
+/* ── REVIEW YORUM SİSTEMİ ───────────────────────── */
+
+/* Yorumları localStorage'dan oku */
+function getTaskComments(taskId) {
+  var all = JSON.parse(localStorage.getItem('priorvia_comments') || '{}');
+  return all[taskId] || [];
+}
+
+/* Yorum kaydet */
+function saveTaskComment(taskId, comment) {
+  var all = JSON.parse(localStorage.getItem('priorvia_comments') || '{}');
+  if (!all[taskId]) all[taskId] = [];
+  all[taskId].push(comment);
+  localStorage.setItem('priorvia_comments', JSON.stringify(all));
+}
+
+/* Yorumları render et */
+function renderReviewComments(taskId) {
+  var list   = document.getElementById('rvCommentsList');
+  var countEl = document.getElementById('rvCommentCount');
+  if (!list) return;
+
+  var comments = getTaskComments(taskId);
+  if (countEl) countEl.textContent = comments.length;
+
+  if (comments.length === 0) {
+    list.innerHTML = '<p class="db-empty-sm">Henüz yorum yok.</p>';
+    return;
+  }
+
+  list.innerHTML = comments.map(function(c) {
+    var ini = (c.author || '?').split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+    return '<div class="rv-comment-item">' +
+      '<div class="rv-comment-avatar">' + escHtml(ini) + '</div>' +
+      '<div class="rv-comment-body">' +
+        '<div class="rv-comment-meta">' +
+          '<strong>' + escHtml(c.author) + '</strong>' +
+          '<span>' + timeAgo(c.time) + '</span>' +
+        '</div>' +
+        '<div class="rv-comment-text">' + escHtml(c.text) + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  /* En alta kaydır */
+  list.scrollTop = list.scrollHeight;
+}
+
+/* Yorum gönder */
+function submitReviewComment() {
+  var inp    = document.getElementById('rvCommentInput');
+  var taskId = document.getElementById('rvEditBtn') ? null : null;
+
+  /* Aktif task id'yi bul — rvEditBtn'in onclick'inden al */
+  var editBtn = document.getElementById('rvEditBtn');
+  if (!editBtn || !editBtn.onclick) { alert('Görev bulunamadı.'); return; }
+
+  /* Task id'yi başlıktan bul */
+  var titleEl = document.getElementById('rvTitle');
+  var taskTitle = titleEl ? titleEl.textContent : '';
+  var task = tasks.find(function(t){ return t.title === taskTitle; });
+  if (!task) { alert('Görev bulunamadı.'); return; }
+
+  var text = inp ? inp.value.trim() : '';
+  if (!text) { inp.focus(); return; }
+
+  var profile = getMyProfile();
+  var comment = {
+    id:     Date.now().toString(),
+    taskId: task.id,
+    author: profile.name || currentUser,
+    text:   text,
+    time:   Date.now()
+  };
+
+  saveTaskComment(task.id, comment);
+
+  /* Yorumu ekrana yansıt */
+  renderReviewComments(task.id);
+
+  /* Input'u temizle */
+  if (inp) inp.value = '';
+
+  /* Bildirim: görev sahibine yorum bildirimi */
+  addNotif(
+    '"' + task.title + '" görevine ' + (profile.name || currentUser) + ' yorum ekledi',
+    'update'
+  );
+
+  showSaveBar('Yorum eklendi.');
 }
