@@ -16,9 +16,7 @@ if (!token) {
 }
 
 /* ── LOGOUT ───────────────────────────────────── */
-// Cikis butonlarini backend'e bagla
 document.addEventListener('DOMContentLoaded', function() {
-  // Sidebar cikis butonu
   var logoutBtns = document.querySelectorAll('.db-logout-btn, a[href="homePage.html"]');
   logoutBtns.forEach(function(btn) {
     btn.addEventListener('click', function(e) {
@@ -41,8 +39,8 @@ var editId      = null;
 var calDate     = new Date();
 var darkMode    = localStorage.getItem('priorvia_dark') === '1';
 
-/* Aktif kullanici - backendden gelir */
-var _rawUser = localStorage.getItem('priorvia_user') || 'Kullanici';
+/* Aktif kullanıcı - backend'den gelir */
+var _rawUser = localStorage.getItem('priorvia_user') || 'Kullanıcı';
 var currentUser;
 try {
   var _parsed = JSON.parse(_rawUser);
@@ -107,7 +105,7 @@ function updateUserInfo() {
   var ini = displayName.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
   setText('sidebarAvatar', ini);
   setText('sidebarName', displayName);
-  setText('sidebarRole', 'Proje Yoneticisi');
+  setText('sidebarRole', 'Proje Yöneticisi');
   setText('topbarAvatar', ini);
   setText('topbarName', displayName.split(' ')[0]);
 }
@@ -140,7 +138,10 @@ function showView(view) {
   document.getElementById('dbOverlay').classList.remove('open');
   editId = null;
 
-  var allViewIds = ['viewDashboard','viewProjects','viewMyTasks','viewTeam','viewNotifications','viewCalendar','viewArchive','viewMyprofile'];
+  var allViewIds = [
+    'viewDashboard','viewProjects','viewMyTasks','viewTeam',
+    'viewNotifications','viewCalendar','viewArchive','viewMyprofile'
+  ];
   allViewIds.forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.style.display = 'none';
@@ -151,16 +152,26 @@ function showView(view) {
   if (navEl) navEl.classList.add('active');
 
   var labels = {
-    dashboard: 'Dashboard', projects: 'Projeler', mytasks: 'Gorevlerim',
-    team: 'Ekip & Yetkiler', notifications: 'Bildirimler',
-    calendar: 'Takvim', archive: 'Arsiv', myprofile: 'Profilim'
+    dashboard:     'Dashboard',
+    projects:      'Projeler',
+    mytasks:       'Görevlerim',
+    team:          'Ekip & Yetkiler',
+    notifications: 'Bildirimler',
+    calendar:      'Takvim',
+    archive:       'Arşiv',
+    myprofile:     'Profilim'
   };
   setText('breadcrumbCurrent', labels[view] || view);
 
   var viewMap = {
-    dashboard: 'viewDashboard', projects: 'viewProjects', mytasks: 'viewMyTasks',
-    team: 'viewTeam', notifications: 'viewNotifications',
-    calendar: 'viewCalendar', archive: 'viewArchive', myprofile: 'viewMyprofile'
+    dashboard:     'viewDashboard',
+    projects:      'viewProjects',
+    mytasks:       'viewMyTasks',
+    team:          'viewTeam',
+    notifications: 'viewNotifications',
+    calendar:      'viewCalendar',
+    archive:       'viewArchive',
+    myprofile:     'viewMyprofile'
   };
   var el = document.getElementById(viewMap[view]);
   if (el) el.style.display = '';
@@ -235,7 +246,7 @@ function initDrawer() {
 function populateProjectDropdown(selectedId) {
   var sel = document.getElementById('fProject');
   if (!sel) return;
-  sel.innerHTML = '<option value="">— Proje Secin —</option>';
+  sel.innerHTML = '<option value="">— Proje Seçin —</option>';
   projects.forEach(function(p) {
     var opt = document.createElement('option');
     opt.value = p.id;
@@ -249,7 +260,7 @@ function openDrawer(defaultStatus) {
   defaultStatus = defaultStatus || 'todo';
   editId = null;
   document.getElementById('editTaskId').value = '';
-  document.getElementById('drawerTitle').textContent = 'Yeni Gorev';
+  document.getElementById('drawerTitle').textContent = 'Yeni Görev';
   document.getElementById('fTitle').value    = '';
   document.getElementById('fDesc').value     = '';
   document.getElementById('fPriority').value = 'med';
@@ -272,7 +283,7 @@ function openEditDrawer(id) {
   if (!task) return;
   editId = id;
   document.getElementById('editTaskId').value = id;
-  document.getElementById('drawerTitle').textContent = 'Gorevi Duzenle';
+  document.getElementById('drawerTitle').textContent = 'Görevi Düzenle';
   document.getElementById('fTitle').value    = task.title;
   document.getElementById('fDesc').value     = task.desc || '';
   document.getElementById('fPriority').value = task.priority;
@@ -320,20 +331,20 @@ function saveTask() {
 
   if (editId) {
     tasks = tasks.map(function(t){ return t.id === editId ? Object.assign({}, t, taskData) : t; });
-    addActivity('"' + title + '" guncellendi', 'orange');
-    addNotif('Gorev guncellendi: ' + title, 'update');
-    showSaveBar('Gorev guncellendi.');
+    addActivity('"' + title + '" güncellendi', 'orange');
+    addNotif('Görev güncellendi: ' + title, 'update');
+    showSaveBar('Görev güncellendi.');
   } else {
     taskData.id = Date.now().toString();
     taskData.createdAt = new Date().toISOString();
     tasks.push(taskData);
-    addActivity('Yeni gorev: "' + title + '"', 'green');
-    addNotif('Yeni gorev olusturuldu: ' + title, 'new');
-    showSaveBar('Gorev olusturuldu.');
+    addActivity('Yeni görev: "' + title + '"', 'green');
+    addNotif('Yeni görev oluşturuldu: ' + title, 'new');
+    showSaveBar('Görev oluşturuldu.');
   }
 
   if (taskData.status === 'done') {
-    addNotif('"' + title + '" tamamlandi — PM onayi gerekiyor', 'warn');
+    addNotif('"' + title + '" tamamlandı — PM onayı gerekiyor', 'warn');
   }
 
   persist();
@@ -343,11 +354,11 @@ function saveTask() {
   closeDrawer();
 }
 
-/* ── ARCHIVE TASK ─────────────────────────────── */
+/* ── ARCHIVE TASK (PM Approval) ───────────────── */
 function archiveTask(id) {
   var task = tasks.find(function(t){ return t.id === id; });
   if (!task) return;
-  if (!confirm('"' + task.title + '" arsive tasınacak. PM olarak onaylıyor musunuz?')) return;
+  if (!confirm('"' + task.title + '" arşive taşınacak. PM olarak onaylıyor musunuz?')) return;
 
   var archivedTask = Object.assign({}, task, {
     archivedAt: new Date().toISOString(),
@@ -356,14 +367,14 @@ function archiveTask(id) {
   archived.push(archivedTask);
   tasks = tasks.filter(function(t){ return t.id !== id; });
 
-  addActivity('"' + task.title + '" arsive tasindi', 'blue');
-  addNotif('"' + task.title + '" PM tarafindan onaylanarak arsive tasindi', 'archive');
+  addActivity('"' + task.title + '" arşive taşındı', 'blue');
+  addNotif('"' + task.title + '" PM tarafından onaylanarak arşive taşındı', 'archive');
 
   localStorage.setItem('priorvia_archive', JSON.stringify(archived));
   persist();
   render();
   renderArchive();
-  showSaveBar('Gorev arsive tasindi.');
+  showSaveBar('Görev arşive taşındı.');
 }
 
 /* ── ARCHIVE RENDER ───────────────────────────── */
@@ -371,12 +382,12 @@ function renderArchive() {
   var list = document.getElementById('archiveList');
   if (!list) return;
   if (archived.length === 0) {
-    list.innerHTML = '<div class="db-empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg><p>Arsivde henuz gorev yok.</p><span>Tamamlanan gorevleri PM onayi ile arsivleyebilirsiniz.</span></div>';
+    list.innerHTML = '<div class="db-empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg><p>Arşivde henüz görev yok.</p><span>Tamamlanan görevleri PM onayıyla arşivleyebilirsiniz.</span></div>';
     return;
   }
 
   var html = '<div class="db-archive-table">';
-  html += '<div class="db-archive-header"><span>GOREV</span><span>ATANAN</span><span>PROJE</span><span>TAMAMLANMA</span><span>ARSIVLEYEN PM</span></div>';
+  html += '<div class="db-archive-header"><span>GÖREV</span><span>ATANAN</span><span>PROJE</span><span>TAMAMLANMA</span><span>ARŞİVLEYEN PM</span></div>';
 
   archived.slice().reverse().forEach(function(t) {
     var proj = projects.find(function(p){ return p.id === t.projectId; });
@@ -408,7 +419,7 @@ function openProjectDrawer(editProjId) {
   var isEdit = typeof editProjId === 'string';
   var proj = isEdit ? projects.find(function(p){ return p.id === editProjId; }) : null;
 
-  document.getElementById('projectDrawerTitle').textContent = isEdit ? 'Projeyi Duzenle' : 'Yeni Proje';
+  document.getElementById('projectDrawerTitle').textContent = isEdit ? 'Projeyi Düzenle' : 'Yeni Proje';
   document.getElementById('editProjectId').value = isEdit ? editProjId : '';
   document.getElementById('pName').value     = proj ? proj.name : '';
   document.getElementById('pDesc').value     = proj ? proj.desc || '' : '';
@@ -431,7 +442,7 @@ function openProjectDrawer(editProjId) {
     cl.appendChild(label);
   });
   if (teamMembers.length === 0) {
-    cl.innerHTML = '<p style="font-size:12px;color:var(--text-muted)">Once ekip uyesi ekleyin.</p>';
+    cl.innerHTML = '<p style="font-size:12px;color:var(--text-muted)">Önce ekip üyesi ekleyin.</p>';
   }
 
   document.getElementById('projectDrawer').classList.add('open');
@@ -446,7 +457,7 @@ function closeProjectDrawer() {
 
 function saveProject() {
   var name = document.getElementById('pName').value.trim();
-  if (!name) { alert('Proje adi zorunludur.'); return; }
+  if (!name) { alert('Proje adı zorunludur.'); return; }
 
   var memberIds = [];
   document.querySelectorAll('#memberCheckList input[type=checkbox]:checked').forEach(function(cb) {
@@ -465,15 +476,15 @@ function saveProject() {
 
   if (editProjId) {
     projects = projects.map(function(p){ return p.id === editProjId ? Object.assign({}, p, projData) : p; });
-    addActivity('Proje guncellendi: "' + name + '"', 'blue');
-    showSaveBar('Proje guncellendi.');
+    addActivity('Proje güncellendi: "' + name + '"', 'blue');
+    showSaveBar('Proje güncellendi.');
   } else {
     projData.id = Date.now().toString();
     projData.createdAt = new Date().toISOString();
     projects.push(projData);
     addActivity('Yeni proje: "' + name + '"', 'green');
-    addNotif('Yeni proje olusturuldu: ' + name, 'new');
-    showSaveBar('Proje olusturuldu.');
+    addNotif('Yeni proje oluşturuldu: ' + name, 'new');
+    showSaveBar('Proje oluşturuldu.');
   }
 
   localStorage.setItem('priorvia_projects', JSON.stringify(projects));
@@ -506,7 +517,7 @@ function renderProjects() {
   setText('projectsDoneCount', projects.length + ' proje aktif');
 
   if (sorted.length === 0) {
-    list.innerHTML = '<div class="db-empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><p>Henuz proje yok.</p><span>Yeni proje olusturmak icin butona tiklayin.</span></div>';
+    list.innerHTML = '<div class="db-empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><p>Henüz proje yok.</p><span>Yeni proje oluşturmak için butona tıklayın.</span></div>';
     return;
   }
 
@@ -533,7 +544,10 @@ function renderProjects() {
         '<div class="db-proj-icon" style="background:' + color + '22;color:' + color + '">' +
           '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>' +
         '</div>' +
-        '<div><div class="db-proj-name">' + escHtml(p.name) + '</div><div class="db-proj-meta">' + projTasks.length + ' gorev · ' + createdDate + '</div></div>' +
+        '<div>' +
+          '<div class="db-proj-name">' + escHtml(p.name) + '</div>' +
+          '<div class="db-proj-meta">' + projTasks.length + ' görev · ' + createdDate + '</div>' +
+        '</div>' +
       '</div>' +
       '<div class="db-proj-members">' + (memberHtml || '<span style="color:var(--text-muted);font-size:12px">—</span>') + '</div>' +
       '<div class="db-proj-budget">' + (p.budget > 0 ? '$' + p.budget.toLocaleString() : '<span style="color:#f59e0b;font-size:12px">Belirlenmedi</span>') + '</div>' +
@@ -542,7 +556,7 @@ function renderProjects() {
         '<span class="db-proj-pct" style="color:' + color + '">%' + completion + '</span>' +
       '</div>' +
       '<div class="db-proj-actions">' +
-        '<button class="db-card-btn" title="Duzenle" onclick="openProjectDrawer(\'' + p.id + '\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+        '<button class="db-card-btn" title="Düzenle" onclick="openProjectDrawer(\'' + p.id + '\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
         '<button class="db-card-btn danger" title="Sil" onclick="deleteProject(\'' + p.id + '\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>' +
       '</div>' +
     '</div>';
@@ -563,7 +577,7 @@ function renderMyTasks() {
   setText('myTaskCount', myTasks.length);
 
   if (myTasks.length === 0) {
-    list.innerHTML = '<div class="db-empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>Size atanan gorev yok.</p><span>Atanan kisi olarak adinizi kullandiginizda gorevler burada gorünur.</span></div>';
+    list.innerHTML = '<div class="db-empty-state"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><p>Size atanan görev yok.</p><span>Atanan kişi olarak adınızı kullandığınızda görevler burada görünür.</span></div>';
     return;
   }
 
@@ -573,23 +587,26 @@ function renderMyTasks() {
   var html = '<div class="db-mytasks-grid">';
   myTasks.forEach(function(task) {
     var proj = projects.find(function(p){ return p.id === task.projectId; });
-    var pLabel = { high:'YUKSEK', med:'ORTA', low:'DUSUK' }[task.priority] || '';
-    var statusLabel = { todo:'Yapilacak', inprogress:'Devam Ediyor', done:'Tamamlandi' }[task.status] || '';
+    var pLabel = { high:'YÜKSEK', med:'ORTA', low:'DÜŞÜK' }[task.priority] || '';
+    var statusLabel = { todo:'Yapılacak', inprogress:'Devam Ediyor', done:'Tamamlandı' }[task.status] || '';
     var statusCls = { todo:'mt-todo', inprogress:'mt-prog', done:'mt-done' }[task.status] || '';
     var today = new Date(); today.setHours(0,0,0,0);
     var isOverdue = task.date && new Date(task.date) < today && task.status !== 'done';
 
     html += '<div class="db-mytask-card' + (task.status==='done'?' db-card-done':'') + '">' +
-      '<div class="db-card-top"><span class="priority-tag ' + task.priority + '">' + pLabel + '</span><span class="db-mt-status ' + statusCls + '">' + statusLabel + '</span></div>' +
+      '<div class="db-card-top">' +
+        '<span class="priority-tag ' + task.priority + '">' + pLabel + '</span>' +
+        '<span class="db-mt-status ' + statusCls + '">' + statusLabel + '</span>' +
+      '</div>' +
       '<div class="db-card-title">' + escHtml(task.title) + '</div>' +
       (task.desc ? '<div class="db-mytask-desc">' + escHtml(task.desc.substring(0,80)) + (task.desc.length>80?'...':'') + '</div>' : '') +
       '<div class="db-card-meta">' +
-        (task.date ? '<span class="db-card-date' + (isOverdue?' overdue':'') + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDate(new Date(task.date)) + (isOverdue?' ?':'') + '</span>' : '') +
+        (task.date ? '<span class="db-card-date' + (isOverdue?' overdue':'') + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDate(new Date(task.date)) + (isOverdue?' ⚠':'') + '</span>' : '') +
         (proj ? '<span class="db-proj-badge db-proj-' + proj.color + '">' + escHtml(proj.name) + '</span>' : '') +
       '</div>' +
       '<div class="db-mytask-actions">' +
-        '<button class="db-card-btn" onclick="openEditDrawer(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Duzenle</button>' +
-        (task.status === 'done' ? '<button class="btn-ghost" style="font-size:12px;padding:5px 10px" onclick="archiveTask(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg> Arsivle (PM)</button>' : '') +
+        '<button class="db-card-btn" onclick="openEditDrawer(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Düzenle</button>' +
+        (task.status === 'done' ? '<button class="btn-ghost" style="font-size:12px;padding:5px 10px" onclick="archiveTask(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg> Arşivle (PM)</button>' : '') +
       '</div>' +
     '</div>';
   });
@@ -599,7 +616,13 @@ function renderMyTasks() {
 
 /* ── NOTIFICATIONS ────────────────────────────── */
 function addNotif(text, type) {
-  notifications.unshift({ id: Date.now().toString(), text: text, type: type || 'info', time: Date.now(), read: false });
+  notifications.unshift({
+    id: Date.now().toString(),
+    text: text,
+    type: type || 'info',
+    time: Date.now(),
+    read: false
+  });
   if (notifications.length > 50) notifications.pop();
   localStorage.setItem('priorvia_notifs', JSON.stringify(notifications));
   updateNotifBadge();
@@ -638,18 +661,29 @@ function updateNotifBadge() {
   urgent.forEach(function(t) {
     var d = new Date(t.date); var today2 = new Date(); today2.setHours(0,0,0,0);
     var ov = d < today2;
-    allNotifs.push({ text: (ov ? '? Gecikmis: ' : '? Yaklasan: ') + t.title, type: ov ? 'warn' : 'info', time: Date.now() });
+    allNotifs.push({ text: (ov ? '⚠ Gecikmiş: ' : '⏰ Yaklaşan: ') + t.title, type: ov ? 'warn' : 'info', time: Date.now() });
   });
   notifications.filter(function(n){ return !n.read; }).slice(0,5).forEach(function(n){ allNotifs.push(n); });
 
-  if (allNotifs.length === 0) { notifList.innerHTML = '<p class="db-empty-sm">Henuz bildirim yok.</p>'; return; }
+  if (allNotifs.length === 0) {
+    notifList.innerHTML = '<p class="db-empty-sm">Henüz bildirim yok.</p>';
+    return;
+  }
 
-  var typeIcon = { new:{ icon:'✦', cls:'db-ni-green' }, update:{ icon:'✎', cls:'db-ni-blue' }, warn:{ icon:'?', cls:'db-ni-orange' }, archive:{ icon:'▦', cls:'db-ni-purple' }, info:{ icon:'ℹ', cls:'db-ni-blue' } };
+  var typeIcon = {
+    new:     { icon: '✦', cls: 'db-ni-green' },
+    update:  { icon: '✎', cls: 'db-ni-blue' },
+    warn:    { icon: '⚠', cls: 'db-ni-orange' },
+    archive: { icon: '▦', cls: 'db-ni-purple' },
+    info:    { icon: 'ℹ', cls: 'db-ni-blue' }
+  };
 
   notifList.innerHTML = allNotifs.slice(0,8).map(function(n) {
     var ti = typeIcon[n.type] || typeIcon.info;
-    return '<div class="db-notif-item unread"><div class="db-notif-icon ' + ti.cls + '">' + ti.icon + '</div>' +
-      '<div><div class="db-notif-title">' + escHtml(n.text) + '</div><div class="db-notif-time">' + timeAgo(n.time) + '</div></div></div>';
+    return '<div class="db-notif-item unread">' +
+      '<div class="db-notif-icon ' + ti.cls + '">' + ti.icon + '</div>' +
+      '<div><div class="db-notif-title">' + escHtml(n.text) + '</div>' +
+      '<div class="db-notif-time">' + timeAgo(n.time) + '</div></div></div>';
   }).join('');
 }
 
@@ -665,7 +699,7 @@ function renderNotificationsFull() {
   urgentTasks.forEach(function(t) {
     var d = new Date(t.date); var tod = new Date(); tod.setHours(0,0,0,0);
     var ov = d < tod;
-    allNotifs.push({ id: 'task_' + t.id, text: (ov ? 'Gecikmis gorev: ' : 'Yaklasan teslim: ') + t.title + ' — ' + formatDate(d), type: ov?'warn':'info', time: Date.now(), read: false });
+    allNotifs.push({ id: 'task_' + t.id, text: (ov ? 'Gecikmiş görev: ' : 'Yaklaşan teslim: ') + t.title + ' — ' + formatDate(d), type: ov?'warn':'info', time: Date.now(), read: false });
   });
   notifications.forEach(function(n){ allNotifs.push(n); });
 
@@ -674,9 +708,9 @@ function renderNotificationsFull() {
     return;
   }
 
-  var typeIcon = { new:'✦', update:'✎', warn:'?', archive:'▦', info:'ℹ' };
-  var typeCls  = { new:'db-ni-green', update:'db-ni-blue', warn:'db-ni-orange', archive:'db-ni-purple', info:'db-ni-blue' };
-  var typeLabel = { new:'Yeni', update:'Guncelleme', warn:'Uyari', archive:'Arsiv', info:'Bilgi' };
+  var typeIcon  = { new:'✦', update:'✎', warn:'⚠', archive:'▦', info:'ℹ' };
+  var typeCls   = { new:'db-ni-green', update:'db-ni-blue', warn:'db-ni-orange', archive:'db-ni-purple', info:'db-ni-blue' };
+  var typeLabel = { new:'Yeni', update:'Güncelleme', warn:'Uyarı', archive:'Arşiv', info:'Bilgi' };
 
   list.innerHTML = '<div class="db-notif-full-grid">' + allNotifs.map(function(n) {
     var ti = typeIcon[n.type] || 'ℹ';
@@ -684,53 +718,94 @@ function renderNotificationsFull() {
     var tl = typeLabel[n.type] || 'Bilgi';
     return '<div class="db-notif-full-row' + (n.read?'':' unread') + '" onclick="markNotifRead(\'' + n.id + '\')">' +
       '<div class="db-notif-icon ' + tc + '" style="width:36px;height:36px;font-size:16px">' + ti + '</div>' +
-      '<div style="flex:1"><div class="db-notif-title">' + escHtml(n.text) + '</div>' +
-        '<div style="display:flex;gap:8px;margin-top:3px"><span class="db-role-badge" style="background:var(--green-100);color:var(--green-700)">' + tl + '</span><span class="db-notif-time">' + timeAgo(n.time) + '</span></div>' +
-      '</div>' + (!n.read ? '<div class="db-unread-dot"></div>' : '') +
+      '<div style="flex:1">' +
+        '<div class="db-notif-title">' + escHtml(n.text) + '</div>' +
+        '<div style="display:flex;gap:8px;margin-top:3px">' +
+          '<span class="db-role-badge" style="background:var(--green-100);color:var(--green-700)">' + tl + '</span>' +
+          '<span class="db-notif-time">' + timeAgo(n.time) + '</span>' +
+        '</div>' +
+      '</div>' +
+      (!n.read ? '<div class="db-unread-dot"></div>' : '') +
     '</div>';
   }).join('') + '</div>';
 }
 
 /* ── CALENDAR ─────────────────────────────────── */
 function initCalendar() {
-  var monthNames = ['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
+  var monthNames = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+
   var mSel = document.getElementById('calMonthSelect');
   monthNames.forEach(function(name, i) {
     var opt = document.createElement('option');
-    opt.value = i; opt.textContent = name;
+    opt.value = i;
+    opt.textContent = name;
     mSel.appendChild(opt);
   });
+
   var ySel = document.getElementById('calYearSelect');
   var currentYear = new Date().getFullYear();
   for (var y = currentYear - 5; y <= currentYear + 5; y++) {
     var opt = document.createElement('option');
-    opt.value = y; opt.textContent = y;
+    opt.value = y;
+    opt.textContent = y;
     ySel.appendChild(opt);
   }
+
   mSel.value = calDate.getMonth();
   ySel.value = calDate.getFullYear();
-  mSel.addEventListener('change', function() { calDate.setMonth(parseInt(this.value)); renderCalendar(); });
-  ySel.addEventListener('change', function() { calDate.setFullYear(parseInt(this.value)); renderCalendar(); });
-  document.getElementById('calPrev').addEventListener('click', function() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); });
-  document.getElementById('calNext').addEventListener('click', function() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); });
+
+  mSel.addEventListener('change', function() {
+    calDate.setMonth(parseInt(this.value));
+    renderCalendar();
+  });
+  ySel.addEventListener('change', function() {
+    calDate.setFullYear(parseInt(this.value));
+    renderCalendar();
+  });
+
+  document.getElementById('calPrev').addEventListener('click', function() {
+    calDate.setMonth(calDate.getMonth() - 1);
+    renderCalendar();
+  });
+  document.getElementById('calNext').addEventListener('click', function() {
+    calDate.setMonth(calDate.getMonth() + 1);
+    renderCalendar();
+  });
 }
 
 function renderCalendar() {
   var grid = document.getElementById('calendarGrid');
   if (!grid) return;
+
   var year = calDate.getFullYear();
   var month = calDate.getMonth();
-  var monthNames = ['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
-  var dayNames = ['Pzt','Sal','Car','Per','Cum','Cmt','Paz'];
+  var monthNames = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  var dayNames = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+
   var mSel = document.getElementById('calMonthSelect');
   var ySel = document.getElementById('calYearSelect');
   if (mSel) mSel.value = month;
-  if (ySel) { if (!ySel.querySelector('option[value="' + year + '"]')) { var opt = document.createElement('option'); opt.value = year; opt.textContent = year; ySel.appendChild(opt); } ySel.value = year; }
+  if (ySel) {
+    if (!ySel.querySelector('option[value="' + year + '"]')) {
+      var opt = document.createElement('option');
+      opt.value = year; opt.textContent = year;
+      ySel.appendChild(opt);
+      var opts = Array.from(ySel.options).sort(function(a,b){ return a.value - b.value; });
+      ySel.innerHTML = '';
+      opts.forEach(function(o){ ySel.appendChild(o); });
+    }
+    ySel.value = year;
+  }
+
   setText('calendarMonthLabel', monthNames[month] + ' ' + year);
+
   var firstDay = new Date(year, month, 1).getDay();
   var startOffset = (firstDay === 0) ? 6 : firstDay - 1;
   var daysInMonth = new Date(year, month + 1, 0).getDate();
-  var today = new Date(); today.setHours(0,0,0,0);
+
+  var today = new Date();
+  today.setHours(0,0,0,0);
+
   var tasksByDate = {};
   tasks.forEach(function(t) {
     if (!t.date) return;
@@ -741,23 +816,35 @@ function renderCalendar() {
       tasksByDate[key].push(t);
     }
   });
+
   var html = '<div class="db-cal-daynames">';
   dayNames.forEach(function(d){ html += '<div class="db-cal-dayname">' + d + '</div>'; });
   html += '</div><div class="db-cal-grid">';
-  for (var i = 0; i < startOffset; i++) { html += '<div class="db-cal-cell db-cal-empty"></div>'; }
+
+  for (var i = 0; i < startOffset; i++) {
+    html += '<div class="db-cal-cell db-cal-empty"></div>';
+  }
+
   for (var day = 1; day <= daysInMonth; day++) {
     var dayTasks = tasksByDate[day] || [];
     var cellDate = new Date(year, month, day);
     var isToday = cellDate.getTime() === today.getTime();
     var cls = 'db-cal-cell' + (isToday ? ' db-cal-today' : '') + (dayTasks.length > 0 ? ' db-cal-has-tasks' : '');
-    html += '<div class="' + cls + '"><span class="db-cal-day-num' + (isToday ? ' today-num' : '') + '">' + day + '</span>';
+
+    html += '<div class="' + cls + '">';
+    html += '<span class="db-cal-day-num' + (isToday ? ' today-num' : '') + '">' + day + '</span>';
+
     dayTasks.slice(0,3).forEach(function(t) {
       var color = { high:'#ef4444', med:'#f59e0b', low:'#22c55e' }[t.priority] || '#94a3b8';
-      html += '<div class="db-cal-task-dot" style="border-left:3px solid ' + color + '" title="' + escHtml(t.title) + '">' + escHtml(t.title.substring(0,22)) + (t.title.length>22?'...':'') + '</div>';
+      html += '<div class="db-cal-task-dot" style="border-left:3px solid ' + color + '" title="' + escHtml(t.title) + '">' +
+        escHtml(t.title.substring(0,22)) + (t.title.length>22?'...':'') + '</div>';
     });
-    if (dayTasks.length > 3) html += '<div class="db-cal-more">+' + (dayTasks.length-3) + ' daha</div>';
+    if (dayTasks.length > 3) {
+      html += '<div class="db-cal-more">+' + (dayTasks.length-3) + ' daha</div>';
+    }
     html += '</div>';
   }
+
   html += '</div>';
   grid.innerHTML = html;
 }
@@ -797,7 +884,8 @@ function buildCard(task) {
   card.draggable = true;
   card.addEventListener('dragstart', function(){ dragId = task.id; });
 
-  var pLabel = { high:'YUKSEK', med:'ORTA', low:'DUSUK' }[task.priority] || '';
+  var pLabel = { high:'YÜKSEK', med:'ORTA', low:'DÜŞÜK' }[task.priority] || '';
+
   var progressHTML = '';
   if (task.status === 'inprogress' && task.progress > 0) {
     progressHTML = '<div class="db-card-progress"><div class="db-card-prog-bar"><div class="db-card-prog-fill" style="width:' + task.progress + '%"></div></div><span class="db-card-prog-label">%' + task.progress + '</span></div>';
@@ -807,19 +895,20 @@ function buildCard(task) {
     var d = new Date(task.date);
     var today = new Date(); today.setHours(0,0,0,0);
     var isOverdue = d < today && task.status !== 'done';
-    dateHTML = '<span class="db-card-date' + (isOverdue ? ' overdue' : '') + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDate(d) + (isOverdue ? ' ?' : '') + '</span>';
+    dateHTML = '<span class="db-card-date' + (isOverdue ? ' overdue' : '') + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + formatDate(d) + (isOverdue ? ' ⚠' : '') + '</span>';
   }
+
   var proj = projects.find(function(p){ return p.id === task.projectId; });
   var projHTML = proj ? '<span class="db-proj-badge db-proj-' + proj.color + '">' + escHtml(proj.name.substring(0,12)) + '</span>' : '';
   var assigneeHTML = task.assignee ? '<span class="db-card-assignee">' + escHtml(initials(task.assignee)) + '</span>' : '';
   var archiveBtn = task.status === 'done'
-    ? '<button class="db-card-btn" title="Arsivle (PM)" onclick="archiveTask(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg></button>'
+    ? '<button class="db-card-btn" title="Arşivle (PM)" onclick="archiveTask(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/></svg></button>'
     : '';
 
   card.innerHTML =
     '<div class="db-card-top"><span class="priority-tag ' + task.priority + '">' + pLabel + '</span>' +
     '<div class="db-card-actions">' + archiveBtn +
-      '<button class="db-card-btn" title="Duzenle" onclick="openEditDrawer(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+      '<button class="db-card-btn" title="Düzenle" onclick="openEditDrawer(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
       '<button class="db-card-btn danger" title="Sil" onclick="deleteTask(\'' + task.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>' +
     '</div></div>' +
     '<div class="db-card-title">' + escHtml(task.title) + '</div>' +
@@ -837,12 +926,12 @@ function onDrop(e, col) {
   tasks = tasks.map(function(t){ return t.id === dragId ? Object.assign({}, t, {status: col}) : t; });
   if (task) {
     addActivity('"' + task.title + '" → ' + colLabel(col), 'blue');
-    if (col === 'done') addNotif('"' + task.title + '" tamamlandi — PM onayi bekliyor', 'warn');
+    if (col === 'done') addNotif('"' + task.title + '" tamamlandı — PM onayı bekliyor', 'warn');
   }
   dragId = null;
   persist();
   render();
-  showSaveBar('Gorev tasindi.');
+  showSaveBar('Görev taşındı.');
 }
 
 /* ── DELETE ───────────────────────────────────── */
@@ -854,7 +943,7 @@ function deleteTask(id) {
   addActivity('"' + task.title + '" silindi', 'orange');
   persist();
   render();
-  showSaveBar('Gorev silindi.');
+  showSaveBar('Görev silindi.');
 }
 
 /* ── STATS ────────────────────────────────────── */
@@ -876,13 +965,13 @@ function updateAlerts() {
   var today = new Date(); today.setHours(0,0,0,0);
   var tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
   var urgent = tasks.filter(function(t){ return t.date && t.status !== 'done' && new Date(t.date) <= tomorrow; });
-  if (urgent.length === 0) { list.innerHTML = '<p class="db-empty-sm">Yaklasan teslim tarihi yok.</p>'; return; }
+  if (urgent.length === 0) { list.innerHTML = '<p class="db-empty-sm">Yaklaşan teslim tarihi yok.</p>'; return; }
   list.innerHTML = urgent.map(function(t) {
     var d = new Date(t.date); var today2 = new Date(); today2.setHours(0,0,0,0);
     var ov = d < today2;
     return '<div class="db-alert-item"><div class="db-alert-dot ' + (ov?'db-dot-red':'db-dot-orange') + '"></div>' +
       '<div><div class="db-alert-title">' + escHtml(t.title) + '</div>' +
-      '<div class="db-alert-sub">Teslim: <strong>' + formatDate(d) + '</strong>' + (ov?' — gecikmis':'') + '</div></div></div>';
+      '<div class="db-alert-sub">Teslim: <strong>' + formatDate(d) + '</strong>' + (ov?' — gecikmiş':'') + '</div></div></div>';
   }).join('');
 }
 
@@ -895,7 +984,7 @@ function addActivity(text, color) {
 function renderActivity() {
   var list = document.getElementById('activityList');
   if (!list) return;
-  if (activities.length === 0) { list.innerHTML = '<p class="db-empty-sm">Henuz aktivite yok.</p>'; return; }
+  if (activities.length === 0) { list.innerHTML = '<p class="db-empty-sm">Henüz aktivite yok.</p>'; return; }
   list.innerHTML = activities.slice(0,8).map(function(a) {
     return '<div class="db-activity-item"><div class="db-act-dot db-act-' + a.color + '"></div>' +
       '<div><div style="font-size:12.5px;color:var(--text-primary)">' + escHtml(a.text) + '</div>' +
@@ -910,7 +999,7 @@ function updateAssigneeFilter() {
   var current = select.value;
   var names = [];
   tasks.forEach(function(t){ if (t.assignee && names.indexOf(t.assignee) === -1) names.push(t.assignee); });
-  select.innerHTML = '<option value="">Tum Kisiler</option>' +
+  select.innerHTML = '<option value="">Tüm Kişiler</option>' +
     names.map(function(n){ return '<option value="' + escHtml(n) + '"' + (n===current?' selected':'') + '>' + escHtml(n) + '</option>'; }).join('');
 }
 
@@ -961,10 +1050,10 @@ function saveInvite() {
   teamMembers.push(member);
   localStorage.setItem('priorvia_team', JSON.stringify(teamMembers));
   addActivity('"' + name + '" ekibe davet edildi', 'blue');
-  addNotif('"' + name + '" ekibe katildi', 'new');
+  addNotif('"' + name + '" ekibe katıldı', 'new');
   renderTeam();
   closeInviteDrawer();
-  showSaveBar('Davet gonderildi.');
+  showSaveBar('Davet gönderildi.');
 }
 
 function renderTeam() {
@@ -977,22 +1066,22 @@ function renderTeam() {
   setText('teamMemberCount', members);
 
   if (teamMembers.length === 0) {
-    list.innerHTML = '<p class="db-empty-sm" style="padding:24px 0">Henuz uye eklenmedi. "Uye Davet Et" butonunu kullanin.</p>';
+    list.innerHTML = '<p class="db-empty-sm" style="padding:24px 0">Henüz üye eklenmedi. "Üye Davet Et" butonunu kullanın.</p>';
     return;
   }
-  var roleLabel = { pm:'Proje Yoneticisi', member:'Ekip Uyesi', viewer:'Goruntüleyici' };
+  var roleLabel = { pm:'Proje Yöneticisi', member:'Ekip Üyesi', viewer:'Görüntüleyici' };
   var roleCls   = { pm:'db-role-pm', member:'db-role-member', viewer:'db-role-viewer' };
-  var html = '<table class="db-team-table"><thead><tr><th>Uye</th><th>Rol</th><th>Gorev Sayisi</th><th>Katilim</th><th></th></tr></thead><tbody>';
+  var html = '<table class="db-team-table"><thead><tr><th>Üye</th><th>Rol</th><th>Görev Sayısı</th><th>Katılım</th><th></th></tr></thead><tbody>';
   teamMembers.forEach(function(m) {
     var taskCount = tasks.filter(function(t){ return t.assignee && t.assignee.toLowerCase() === m.name.toLowerCase(); }).length;
     var ini = m.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
     var joined = new Date(m.joinedAt).toLocaleDateString('tr-TR', {day:'numeric',month:'short',year:'numeric'});
     html += '<tr><td><div class="db-member-cell"><div class="db-team-avatar">' + escHtml(ini) + '</div>' +
-      '<div><div class="db-member-name db-member-clickable" onclick="openMemberProfile(\'' + m.id + '\')" title="Profili Gor">' + escHtml(m.name) + '</div>' +
+      '<div><div class="db-member-name db-member-clickable" onclick="openMemberProfile(\'' + m.id + '\')" title="Profili Gör">' + escHtml(m.name) + '</div>' +
       (m.email?'<div class="db-member-email">'+escHtml(m.email)+'</div>':'') + '</div></div></td>' +
       '<td><span class="db-role-badge ' + (roleCls[m.role]||'db-role-member') + '">' + (roleLabel[m.role]||m.role) + '</span></td>' +
-      '<td>' + taskCount + ' gorev</td><td>' + joined + '</td>' +
-      '<td><button class="db-remove-btn" onclick="removeMember(\'' + m.id + '\')" title="Uyeyi Cikar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></td></tr>';
+      '<td>' + taskCount + ' görev</td><td>' + joined + '</td>' +
+      '<td><button class="db-remove-btn" onclick="removeMember(\'' + m.id + '\')" title="Üyeyi Çıkar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></td></tr>';
   });
   html += '</tbody></table>';
   list.innerHTML = html;
@@ -1001,15 +1090,17 @@ function renderTeam() {
 function removeMember(id) {
   var m = teamMembers.find(function(x){ return x.id === id; });
   if (!m) return;
-  if (!confirm('"' + m.name + '" ekipten cikarilacak. Emin misiniz?')) return;
+  if (!confirm('"' + m.name + '" ekipten çıkarılacak. Emin misiniz?')) return;
   teamMembers = teamMembers.filter(function(x){ return x.id !== id; });
   localStorage.setItem('priorvia_team', JSON.stringify(teamMembers));
-  addActivity('"' + m.name + '" ekipten cikarildi', 'orange');
+  addActivity('"' + m.name + '" ekipten çıkarıldı', 'orange');
   renderTeam();
-  showSaveBar('Uye cikarildi.');
+  showSaveBar('Üye çıkarıldı.');
 }
 
 /* ── PROFİL MODAL ─────────────────────────────── */
+var profileModalMode = 'view';
+
 function openMyProfile() {
   var profile = getMyProfile();
   var ini = profile.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
@@ -1020,7 +1111,7 @@ function openMyProfile() {
   setText('prfModalTitle', 'Profilim');
   setText('prfViewAvatar', ini); setText('prfEditAvatar', ini);
   setText('prfViewName', profile.name);
-  setText('prfViewRole', 'Proje Yoneticisi');
+  setText('prfViewRole', 'Proje Yöneticisi');
   setText('prfViewEmail', profile.email || 'Belirtilmedi');
   setText('prfViewPhone', profile.phone || 'Belirtilmedi');
   setText('prfStatTasks', myTasks.length);
@@ -1033,9 +1124,10 @@ function openMyProfile() {
   document.getElementById('prfViewMode').style.display = '';
   document.getElementById('prfEditMode').style.display = 'none';
   document.getElementById('prfEditBtn').style.display  = '';
-  document.getElementById('prfEditBtn').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Duzenle';
+  document.getElementById('prfEditBtn').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Düzenle';
   document.getElementById('prfEditBtn').onclick = toggleProfileEdit;
 
+  profileModalMode = 'view';
   document.getElementById('prfModal').classList.add('open');
   document.getElementById('prfOverlay').classList.add('open');
 }
@@ -1043,7 +1135,7 @@ function openMyProfile() {
 function openMemberProfile(id) {
   var m = teamMembers.find(function(x){ return x.id === id; });
   if (!m) return;
-  var roleLabel = { pm:'Proje Yoneticisi', member:'Ekip Uyesi', viewer:'Goruntüleyici' };
+  var roleLabel = { pm:'Proje Yöneticisi', member:'Ekip Üyesi', viewer:'Görüntüleyici' };
   var ini = m.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
   var mTasks    = tasks.filter(function(t){ return t.assignee && t.assignee.toLowerCase() === m.name.toLowerCase(); });
   var mDone     = mTasks.filter(function(t){ return t.status === 'done'; }).length;
@@ -1073,6 +1165,7 @@ function openMemberProfile(id) {
 function toggleProfileEdit() {
   var profile = getMyProfile();
   var isEdit = document.getElementById('prfEditMode').style.display !== 'none';
+
   if (!isEdit) {
     document.getElementById('prfName').value   = profile.name   || '';
     document.getElementById('prfEmail').value  = profile.email  || '';
@@ -1090,18 +1183,25 @@ function toggleProfileEdit() {
 function saveProfileFromModal() {
   var name = document.getElementById('prfName').value.trim();
   if (!name) { alert('Ad Soyad zorunludur.'); return; }
-  var data = { name: name, email: document.getElementById('prfEmail').value.trim(), phone: document.getElementById('prfPhone').value.trim(), github: document.getElementById('prfGithub').value.trim() };
+  var data = {
+    name:   name,
+    email:  document.getElementById('prfEmail').value.trim(),
+    phone:  document.getElementById('prfPhone').value.trim(),
+    github: document.getElementById('prfGithub').value.trim()
+  };
   saveMyProfile(data);
   var ini = name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
-  setText('prfViewAvatar', ini); setText('prfViewName', name);
-  setText('prfViewEmail', data.email || 'Belirtilmedi'); setText('prfViewPhone', data.phone || 'Belirtilmedi');
+  setText('prfViewAvatar', ini);
+  setText('prfViewName', name);
+  setText('prfViewEmail', data.email || 'Belirtilmedi');
+  setText('prfViewPhone', data.phone || 'Belirtilmedi');
   var ghEl = document.getElementById('prfViewGithub');
   if (ghEl) { ghEl.textContent = data.github || 'Belirtilmedi'; ghEl.href = data.github || '#'; }
   document.getElementById('prfViewMode').style.display = '';
   document.getElementById('prfEditMode').style.display = 'none';
-  document.getElementById('prfEditBtn').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Duzenle';
+  document.getElementById('prfEditBtn').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Düzenle';
   document.getElementById('prfEditBtn').onclick = toggleProfileEdit;
-  showSaveBar('Profil guncellendi.');
+  showSaveBar('Profil güncellendi.');
 }
 
 function closeProfileModal() {
@@ -1111,34 +1211,159 @@ function closeProfileModal() {
 
 /* ── PROFİLİM VIEW ────────────────────────────── */
 function renderMyProfile() {
+  var container = document.getElementById('myProfileContent');
+  if (!container) return;
+
   var profile = getMyProfile();
   var ini = profile.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
-  setText('mprfAvatarDisp', ini || '?');
-  setText('mprfNameDisp', profile.name || '—');
-  setText('mprfListName', profile.name || '—');
-  setText('mprfListEmail', profile.email || '—');
-  setText('mprfListPhone', profile.phone || '—');
-  var ghEl = document.getElementById('mprfListGithub');
-  if (ghEl) { if (profile.github) { ghEl.textContent = profile.github; ghEl.href = profile.github; } else { ghEl.textContent = '—'; ghEl.href = '#'; } }
-  var f = function(id, val) { var el = document.getElementById(id); if (el) el.value = val || ''; };
-  f('mprfName', profile.name); f('mprfEmail', profile.email); f('mprfPhone', profile.phone); f('mprfGithub', profile.github);
+  var myTasks  = tasks.filter(function(t){ return t.assignee && t.assignee.toLowerCase() === profile.name.toLowerCase(); });
+  var myDone   = myTasks.filter(function(t){ return t.status === 'done'; }).length;
+  var myInProg = myTasks.filter(function(t){ return t.status === 'inprogress'; }).length;
+  var myProjects = projects.filter(function(p){ return p.members && p.members.length > 0; }).length;
+
+  container.innerHTML = [
+    '<div class="mprf-wrap">',
+
+    '<div class="mprf-left">',
+      '<div class="mprf-avatar-card">',
+        '<div class="mprf-big-avatar">', ini, '</div>',
+        '<div class="mprf-name">', escHtml(profile.name), '</div>',
+        '<div class="mprf-role-tag">Proje Yöneticisi</div>',
+      '</div>',
+
+      '<div class="mprf-stats-card">',
+        '<div class="mprf-stat">',
+          '<div class="mprf-stat-val">', myTasks.length, '</div>',
+          '<div class="mprf-stat-lbl">Toplam Görev</div>',
+        '</div>',
+        '<div class="mprf-stat-divider"></div>',
+        '<div class="mprf-stat">',
+          '<div class="mprf-stat-val">', myDone, '</div>',
+          '<div class="mprf-stat-lbl">Tamamlandı</div>',
+        '</div>',
+        '<div class="mprf-stat-divider"></div>',
+        '<div class="mprf-stat">',
+          '<div class="mprf-stat-val">', myInProg, '</div>',
+          '<div class="mprf-stat-lbl">Devam Ediyor</div>',
+        '</div>',
+      '</div>',
+
+      myTasks.length > 0 ? [
+        '<div class="mprf-recent-card">',
+          '<div class="mprf-sub-title">Son Görevlerim</div>',
+          myTasks.slice(0,4).map(function(t) {
+            var dot = { high:'#ef4444', med:'#f59e0b', low:'#22c55e' }[t.priority];
+            var stLbl = { todo:'Yapılacak', inprogress:'Devam', done:'Tamam' }[t.status];
+            return '<div class="mprf-task-row">' +
+              '<span class="mprf-task-dot" style="background:' + dot + '"></span>' +
+              '<span class="mprf-task-name">' + escHtml(t.title.substring(0,30)) + (t.title.length>30?'...':'') + '</span>' +
+              '<span class="mprf-task-st">' + stLbl + '</span>' +
+            '</div>';
+          }).join(''),
+        '</div>'
+      ].join('') : '',
+    '</div>',
+
+    '<div class="mprf-right">',
+      '<div class="mprf-form-card">',
+        '<div class="mprf-form-header">',
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green-700)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+          '<span>Profil Bilgileri</span>',
+        '</div>',
+
+        '<div class="mprf-form-body">',
+          '<div class="mprf-field-group">',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">Ad Soyad <span style="color:#e53e3e">*</span></label>',
+              '<input type="text" id="mprfName" class="db-input" value="', escHtml(profile.name), '" placeholder="Ad Soyad" />',
+            '</div>',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">E-posta</label>',
+              '<div class="mprf-input-icon">',
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+                '<input type="email" id="mprfEmail" class="db-input mprf-with-icon" value="', escHtml(profile.email || ''), '" placeholder="ornek@email.com" />',
+              '</div>',
+            '</div>',
+          '</div>',
+
+          '<div class="mprf-field-group">',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">Telefon</label>',
+              '<div class="mprf-input-icon">',
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16h.27Z"/></svg>',
+                '<input type="tel" id="mprfPhone" class="db-input mprf-with-icon" value="', escHtml(profile.phone || ''), '" placeholder="+90 555 000 00 00" />',
+              '</div>',
+            '</div>',
+            '<div class="mprf-field">',
+              '<label class="mprf-label">GitHub</label>',
+              '<div class="mprf-input-icon">',
+                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>',
+                '<input type="url" id="mprfGithub" class="db-input mprf-with-icon" value="', escHtml(profile.github || ''), '" placeholder="https://github.com/kullaniciadi" />',
+              '</div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        '<div class="mprf-form-footer">',
+          '<button class="btn-ghost" onclick="renderMyProfile()">',
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.93"/></svg>',
+            'Sıfırla',
+          '</button>',
+          '<button class="btn-primary" onclick="saveMyProfileFromView()">',
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+            'Değişiklikleri Kaydet',
+          '</button>',
+        '</div>',
+      '</div>',
+
+      '<div class="mprf-info-card">',
+        '<div class="mprf-sub-title" style="margin-bottom:12px">',
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+          'Hesap Bilgileri',
+        '</div>',
+        '<div class="mprf-info-row">',
+          '<span class="mprf-info-key">Kullanıcı Adı</span>',
+          '<span class="mprf-info-val">', escHtml(profile.name), '</span>',
+        '</div>',
+        profile.email ? [
+          '<div class="mprf-info-row">',
+            '<span class="mprf-info-key">E-posta</span>',
+            '<span class="mprf-info-val">', escHtml(profile.email), '</span>',
+          '</div>'
+        ].join('') : '',
+        '<div class="mprf-info-row">',
+          '<span class="mprf-info-key">Rol</span>',
+          '<span class="db-role-badge db-role-pm">Proje Yöneticisi</span>',
+        '</div>',
+        '<div class="mprf-info-row">',
+          '<span class="mprf-info-key">Atanan Görevler</span>',
+          '<span class="mprf-info-val">', myTasks.length, ' görev</span>',
+        '</div>',
+      '</div>',
+    '</div>',
+
+    '</div>'
+  ].join('');
 }
 
 function saveMyProfileFromView() {
-  var nameEl = document.getElementById('mprfName');
-  if (!nameEl) return;
-  var name = nameEl.value.trim();
+  var name = document.getElementById('mprfName').value.trim();
   if (!name) { alert('Ad Soyad zorunludur.'); return; }
-  var data = { name: name, email: (document.getElementById('mprfEmail')||{}).value || '', phone: (document.getElementById('mprfPhone')||{}).value || '', github: (document.getElementById('mprfGithub')||{}).value || '' };
+  var data = {
+    name:   name,
+    email:  (document.getElementById('mprfEmail')  || {}).value || '',
+    phone:  (document.getElementById('mprfPhone')  || {}).value || '',
+    github: (document.getElementById('mprfGithub') || {}).value || ''
+  };
   saveMyProfile(data);
   renderMyProfile();
-  showSaveBar('Profil guncellendi.');
+  showSaveBar('Profil güncellendi.');
 }
 
 /* ── WELCOME ──────────────────────────────────── */
 function updateWelcome() {
   var h = new Date().getHours();
-  setText('welcomeMsg', (h<12?'Gunaydin':h<18?'Iyi gunler':'Iyi aksamlar') + ', ' + currentUser.split(' ')[0] + ' ?');
+  setText('welcomeMsg', (h<12?'Günaydın':h<18?'İyi günler':'İyi akşamlar') + ', ' + currentUser.split(' ')[0] + ' 👋');
 }
 
 /* ── PERSIST ──────────────────────────────────── */
@@ -1148,7 +1373,7 @@ function persist() { localStorage.setItem('priorvia_tasks', JSON.stringify(tasks
 var saveBarTimer = null;
 function showSaveBar(msg) {
   var bar = document.getElementById('saveBar');
-  document.getElementById('saveBarMsg').textContent = msg || 'Degisiklikler kaydedildi.';
+  document.getElementById('saveBarMsg').textContent = msg || 'Değişiklikler kaydedildi.';
   bar.classList.add('show');
   clearTimeout(saveBarTimer);
   saveBarTimer = setTimeout(function(){ bar.classList.remove('show'); }, 2600);
@@ -1158,19 +1383,19 @@ function showSaveBar(msg) {
 function setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
 function escHtml(str) { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function initials(name) { return String(name).split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2); }
-function colLabel(col) { return {todo:'Yapilacak',inprogress:'Devam Ediyor',done:'Tamamlandi'}[col]||col; }
+function colLabel(col) { return {todo:'Yapılacak',inprogress:'Devam Ediyor',done:'Tamamlandı'}[col]||col; }
 function formatDate(d) {
   var today = new Date(); today.setHours(0,0,0,0);
   var tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
   var dd = new Date(d); dd.setHours(0,0,0,0);
-  if (dd.getTime()===today.getTime()) return 'Bugun';
-  if (dd.getTime()===tomorrow.getTime()) return 'Yarin';
+  if (dd.getTime()===today.getTime()) return 'Bugün';
+  if (dd.getTime()===tomorrow.getTime()) return 'Yarın';
   return dd.toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
 }
 function timeAgo(ts) {
   var diff = Date.now()-ts;
-  if (diff<60000) return 'Az once';
-  if (diff<3600000) return Math.floor(diff/60000)+' dk once';
-  if (diff<86400000) return Math.floor(diff/3600000)+' saat once';
-  return Math.floor(diff/86400000)+' gun once';
+  if (diff<60000) return 'Az önce';
+  if (diff<3600000) return Math.floor(diff/60000)+' dk önce';
+  if (diff<86400000) return Math.floor(diff/3600000)+' saat önce';
+  return Math.floor(diff/86400000)+' gün önce';
 }
