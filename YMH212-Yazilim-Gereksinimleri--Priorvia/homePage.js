@@ -1,18 +1,7 @@
 /* ===========================
    Priorvia — homePage.js
-   + Backend Auth Entegrasyonu
+   localStorage tabanlı (backend gerektirmez)
 =========================== */
-
-const API_URL = 'http://localhost:4000/api';
-
-async function apiFetch(endpoint, options = {}) {
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    ...options,
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-  });
-  if (!res.ok) throw await res.json();
-  return res.json();
-}
 
 // Zaten giris yapilmissa dashboard'a git
 if (localStorage.getItem('token')) {
@@ -117,8 +106,19 @@ function setError(inputId, errId, msg) {
   return !!msg;
 }
 
-// ---- Sign In (Backend) ----
-document.getElementById('signin-form').addEventListener('submit', async (e) => {
+// ---- Kullanıcı veritabanı (localStorage) ----
+function getUsers() {
+  return JSON.parse(localStorage.getItem('priorvia_users') || '[]');
+}
+function saveUsers(users) {
+  localStorage.setItem('priorvia_users', JSON.stringify(users));
+}
+function findUser(email) {
+  return getUsers().find(u => u.email.toLowerCase() === email.toLowerCase());
+}
+
+// ---- Sign In (localStorage tabanlı) ----
+document.getElementById('signin-form').addEventListener('submit', (e) => {
   e.preventDefault();
   let hasError = false;
   const email = document.getElementById('signin-email').value.trim();
@@ -131,24 +131,43 @@ document.getElementById('signin-form').addEventListener('submit', async (e) => {
 
   if (!hasError) {
     const btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = 'Giris yapiliyor...'; btn.disabled = true;
-    try {
-      const data = await apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ email, password: pw }) });
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('priorvia_user', data.user.name || data.user.email);
-      localStorage.setItem('priorvia_myprofile', JSON.stringify({ name: data.user.name, email: data.user.email, phone: '', github: '' }));
-      closeModal('signin-modal');
-      showToast('Giris basarili! Hos geldiniz');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
-    } catch (err) {
-      setError('signin-password', 'signin-pw-err', 'E-posta veya sifre hatali.');
-      btn.textContent = 'Giris Yap'; btn.disabled = false;
+    btn.textContent = 'Giris yapiliyor...';
+    btn.disabled = true;
+
+    const user = findUser(email);
+
+    if (!user) {
+      setError('signin-email', 'signin-email-err', 'Bu e-posta ile kayitli hesap bulunamadi.');
+      btn.textContent = 'Giris Yap';
+      btn.disabled = false;
+      return;
     }
+
+    if (user.password !== pw) {
+      setError('signin-password', 'signin-pw-err', 'Sifre hatali.');
+      btn.textContent = 'Giris Yap';
+      btn.disabled = false;
+      return;
+    }
+
+    const fakeToken = btoa(email + ':' + Date.now());
+    localStorage.setItem('token', fakeToken);
+    localStorage.setItem('priorvia_user', user.name);
+    localStorage.setItem('priorvia_myprofile', JSON.stringify({
+      name: user.name,
+      email: user.email,
+      phone: user.phone || '',
+      github: user.github || ''
+    }));
+
+    closeModal('signin-modal');
+    showToast('Giris basarili! Hos geldiniz ' + user.name.split(' ')[0]);
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
   }
 });
 
-// ---- Sign Up (Backend) ----
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
+// ---- Sign Up (localStorage tabanlı) ----
+document.getElementById('signup-form').addEventListener('submit', (e) => {
   e.preventDefault();
   let hasError = false;
   const name  = document.getElementById('signup-name').value.trim();
@@ -168,30 +187,51 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   else { termsErr.textContent = ''; }
 
   if (!hasError) {
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = 'Olusturuluyor...'; btn.disabled = true;
-    try {
-      const data = await apiFetch('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password: pw }) });
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('priorvia_user', data.user.name || data.user.email);
-      localStorage.setItem('priorvia_myprofile', JSON.stringify({ name: data.user.name, email: data.user.email, phone: '', github: '' }));
-      closeModal('signup-modal');
-      showToast('Hesabiniz olusturuldu! Hos geldiniz');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
-    } catch (err) {
-      const msg = err.message || '';
-      setError('signup-email', 'signup-email-err', msg.includes('kayitli') ? 'Bu e-posta zaten kayitli.' : 'Kayit basarisiz.');
-      btn.textContent = 'Ucretsiz Hesap Olustur'; btn.disabled = false;
+    // E-posta daha önce kayıtlı mı?
+    if (findUser(email)) {
+      setError('signup-email', 'signup-email-err', 'Bu e-posta adresi zaten kayitli.');
+      return;
     }
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Olusturuluyor...';
+    btn.disabled = true;
+
+    // Kullanıcıyı kaydet
+    const users = getUsers();
+    const newUser = { name, email, password: pw, phone: '', github: '', createdAt: new Date().toISOString() };
+    users.push(newUser);
+    saveUsers(users);
+
+    const fakeToken = btoa(email + ':' + Date.now());
+    localStorage.setItem('token', fakeToken);
+    localStorage.setItem('priorvia_user', name);
+    localStorage.setItem('priorvia_myprofile', JSON.stringify({
+      name,
+      email,
+      phone: '',
+      github: ''
+    }));
+
+    closeModal('signup-modal');
+    showToast('Hesabiniz olusturuldu! Hos geldiniz ' + name.split(' ')[0]);
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
   }
 });
 
+// ---- Input hata temizleme ----
 ['signin-email','signin-password','signup-name','signup-email','signup-password'].forEach(id => {
   const el = document.getElementById(id);
   if (el) {
     el.addEventListener('input', () => {
       el.classList.remove('error');
-      const map = { 'signin-email':'signin-email-err','signin-password':'signin-pw-err','signup-name':'signup-name-err','signup-email':'signup-email-err','signup-password':'signup-pw-err' };
+      const map = {
+        'signin-email':    'signin-email-err',
+        'signin-password': 'signin-pw-err',
+        'signup-name':     'signup-name-err',
+        'signup-email':    'signup-email-err',
+        'signup-password': 'signup-pw-err'
+      };
       const errEl = document.getElementById(map[id]);
       if (errEl) errEl.textContent = '';
     });
