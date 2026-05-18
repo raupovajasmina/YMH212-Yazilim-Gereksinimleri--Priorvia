@@ -3362,3 +3362,92 @@ body.dark-mode .db-action-edit    { background: #152019; color: #4ade80; border-
 body.dark-mode .db-action-review  { background: #0d1a2a; color: #60a5fa; border-color: #1e3a5f; }
 body.dark-mode .db-action-archive { background: #1a0d2a; color: #a78bfa; border-color: #2e1a47; }
 body.dark-mode .db-notif-comment  { background: linear-gradient(90deg, #0d1a2a 0%, #0f1f14 100%) !important; border-left-color: #3b82f6; }
+/* ── Ekip Proje Seçici ───────────────────────── */
+.db-team-proj-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+.db-team-proj-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.db-team-proj-select {
+  min-width: 220px;
+  padding: 9px 12px;
+  font-size: 13.5px;
+}
+.db-team-proj-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+body.dark-mode .db-team-proj-selector {
+  background: #1e2d22;
+  border-color: #253825;
+}
+/* ── Ekip Proje Filtresi ek stiller ─────────── */
+.db-team-proj-selector {
+  flex-wrap: wrap;
+}
+
+.db-team-proj-select {
+  flex: 1;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+#teamProjHint {
+  transition: color .2s;
+}
+/* ── Ekip Proje Filtresi düzeltme ── */
+.db-team-proj-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+.db-team-proj-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.db-team-proj-select {
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+  padding: 9px 12px;
+  font-size: 13.5px;
+}
+#teamProjHint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+  transition: color .2s;
+}
+body.dark-mode .db-team-proj-selector {
+  background: #1e2d22;
+  border-color: #253825;
+}

@@ -530,7 +530,11 @@ function initProjectDrawer() {
 }
 
 function openProjectDrawer(editProjId) {
+  /* Her açılışta taze oku — sonradan eklenen üyeler görünsün */
+  teamMembers = JSON.parse(localStorage.getItem('priorvia_team') || '[]');
+  
   var isEdit = typeof editProjId === 'string';
+  // ... geri kalan kod aynı kalır
   var proj = isEdit ? projects.find(function(p){ return p.id === editProjId; }) : null;
 
   document.getElementById('projectDrawerTitle').textContent = isEdit ? 'Projeyi Düzenle' : 'Yeni Proje';
@@ -620,6 +624,8 @@ function deleteProject(id) {
 }
 
 function renderProjects() {
+  teamMembers = JSON.parse(localStorage.getItem('priorvia_team') || '[]');
+  projects    = JSON.parse(localStorage.getItem('priorvia_projects') || '[]');
   var list = document.getElementById('projectsList');
   if (!list) return;
 
@@ -1256,6 +1262,12 @@ function initFilters() {
   });
 }
 
+/* ================================================
+   EKİP & YETKİLER — DÜZELTME
+   Bu fonksiyonları dashboard.js içindeki mevcut
+   renderTeam() ve initInviteDrawer() ile değiştir.
+   ================================================ */
+
 /* ── TEAM RENDER ──────────────────────────────── */
 function initInviteDrawer() {
   var inviteBtn = document.getElementById('inviteBtn');
@@ -1264,26 +1276,39 @@ function initInviteDrawer() {
   document.getElementById('inviteCancel').addEventListener('click', closeInviteDrawer);
   document.getElementById('inviteSave').addEventListener('click', saveInvite);
 }
+
 function openInviteDrawer() {
   document.getElementById('inviteName').value  = '';
   document.getElementById('inviteEmail').value = '';
+  document.getElementById('invitePhone') && (document.getElementById('invitePhone').value = '');
+  document.getElementById('inviteGithub') && (document.getElementById('inviteGithub').value = '');
   document.getElementById('inviteRole').value  = 'member';
   document.getElementById('inviteDrawer').classList.add('open');
   document.getElementById('dbOverlay').classList.add('open');
   document.getElementById('inviteName').focus();
 }
+
 function closeInviteDrawer() {
   document.getElementById('inviteDrawer').classList.remove('open');
   document.getElementById('dbOverlay').classList.remove('open');
 }
+
 function saveInvite() {
   var name   = document.getElementById('inviteName').value.trim();
   var email  = document.getElementById('inviteEmail').value.trim();
-  var phone  = document.getElementById('invitePhone').value.trim();
-  var github = document.getElementById('inviteGithub').value.trim();
+  var phone  = document.getElementById('invitePhone') ? document.getElementById('invitePhone').value.trim() : '';
+  var github = document.getElementById('inviteGithub') ? document.getElementById('inviteGithub').value.trim() : '';
   var role   = document.getElementById('inviteRole').value;
   if (!name) { alert('Ad Soyad zorunludur.'); return; }
-  var member = { id: Date.now().toString(), name: name, email: email, phone: phone, github: github, role: role, joinedAt: new Date().toISOString() };
+  var member = {
+    id: Date.now().toString(),
+    name: name,
+    email: email,
+    phone: phone,
+    github: github,
+    role: role,
+    joinedAt: new Date().toISOString()
+  };
   teamMembers.push(member);
   localStorage.setItem('priorvia_team', JSON.stringify(teamMembers));
   addActivity('"' + name + '" ekibe davet edildi', 'blue');
@@ -1291,37 +1316,6 @@ function saveInvite() {
   renderTeam();
   closeInviteDrawer();
   showSaveBar('Davet gönderildi.');
-}
-
-function renderTeam() {
-  var list = document.getElementById('teamMemberList');
-  if (!list) return;
-  var pms = teamMembers.filter(function(m){ return m.role === 'pm'; }).length;
-  var members = teamMembers.filter(function(m){ return m.role === 'member'; }).length;
-  setText('teamTotalCount', teamMembers.length);
-  setText('teamPMCount', pms);
-  setText('teamMemberCount', members);
-
-  if (teamMembers.length === 0) {
-    list.innerHTML = '<p class="db-empty-sm" style="padding:24px 0">Henüz üye eklenmedi. "Üye Davet Et" butonunu kullanın.</p>';
-    return;
-  }
-  var roleLabel = { pm:'Proje Yöneticisi', member:'Ekip Üyesi', viewer:'Görüntüleyici' };
-  var roleCls   = { pm:'db-role-pm', member:'db-role-member', viewer:'db-role-viewer' };
-  var html = '<table class="db-team-table"><thead><tr><th>Üye</th><th>Rol</th><th>Görev Sayısı</th><th>Katılım</th><th></th></tr></thead><tbody>';
-  teamMembers.forEach(function(m) {
-    var taskCount = tasks.filter(function(t){ return t.assignee && t.assignee.toLowerCase() === m.name.toLowerCase(); }).length;
-    var ini = m.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
-    var joined = new Date(m.joinedAt).toLocaleDateString('tr-TR', {day:'numeric',month:'short',year:'numeric'});
-    html += '<tr><td><div class="db-member-cell"><div class="db-team-avatar">' + escHtml(ini) + '</div>' +
-      '<div><div class="db-member-name db-member-clickable" onclick="openMemberProfile(\'' + m.id + '\')" title="Profili Gör">' + escHtml(m.name) + '</div>' +
-      (m.email?'<div class="db-member-email">'+escHtml(m.email)+'</div>':'') + '</div></div></td>' +
-      '<td><span class="db-role-badge ' + (roleCls[m.role]||'db-role-member') + '">' + (roleLabel[m.role]||m.role) + '</span></td>' +
-      '<td>' + taskCount + ' görev</td><td>' + joined + '</td>' +
-      '<td><button class="db-remove-btn" onclick="removeMember(\'' + m.id + '\')" title="Üyeyi Çıkar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></td></tr>';
-  });
-  html += '</tbody></table>';
-  list.innerHTML = html;
 }
 
 function removeMember(id) {
@@ -1333,6 +1327,213 @@ function removeMember(id) {
   addActivity('"' + m.name + '" ekipten çıkarıldı', 'orange');
   renderTeam();
   showSaveBar('Üye çıkarıldı.');
+}
+
+/* ── Proje Filtresi Doldur ────────────────────── */
+function populateTeamProjectFilter() {
+  var sel = document.getElementById('teamProjectFilter');
+  if (!sel) return;
+  var current = sel.value;
+
+  /* Tekil üye sayısını hesapla */
+var uniqueCount = [];
+var seenK = {};
+teamMembers.forEach(function(m) {
+  var k = (m.email || m.name || m.id).toLowerCase().trim();
+  if (!seenK[k]) { seenK[k] = true; uniqueCount.push(m); }
+});
+sel.innerHTML = '<option value="">👥 Tüm Üyeler (' + uniqueCount.length + ')</option>';
+
+  projects.forEach(function(p) {
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    var memberCount = p.members ? p.members.filter(function(mid){
+      return teamMembers.some(function(m){ return m.id === mid; });
+    }).length : 0;
+    opt.textContent = p.name + ' — ' + memberCount + ' üye';
+    if (p.id === current) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  /* Change event — sadece bir kez bağla */
+  if (!sel.dataset.bound) {
+    sel.dataset.bound = '1';
+    sel.addEventListener('change', function() {
+      renderTeam();
+    });
+  }
+}
+
+/* ── Ana Render Fonksiyonu ───────────────────── */
+function renderTeam() {
+  teamMembers = JSON.parse(localStorage.getItem('priorvia_team') || '[]');
+  projects    = JSON.parse(localStorage.getItem('priorvia_projects') || '[]');
+  var list = document.getElementById('teamMemberList');
+  if (!list) return;
+
+
+  /* Proje filtresini doldur (her renderda güncelle) */
+  populateTeamProjectFilter();
+
+  /* Seçili proje */
+  var sel = document.getElementById('teamProjectFilter');
+  var selProjId = sel ? sel.value : '';
+
+  /* Filtreye göre üyeleri belirle */
+  /* Çift kaydı önle: aynı e-posta VEYA aynı isimden yalnızca birini göster */
+var uniqueMembers = [];
+var seenKeys = {};
+teamMembers.forEach(function(m) {
+  var key = (m.email || m.name || m.id).toLowerCase().trim();
+  if (!seenKeys[key]) {
+    seenKeys[key] = true;
+    uniqueMembers.push(m);
+  }
+});
+  /* Sayaçlar — uniqueMembers'a göre */
+  var pms     = uniqueMembers.filter(function(m){ return m.role === 'pm'; }).length;
+  var members = uniqueMembers.filter(function(m){ return m.role === 'member'; }).length;
+  setText('teamTotalCount',  uniqueMembers.length);
+  setText('teamPMCount',     pms);
+  setText('teamMemberCount', members);
+
+var filteredMembers;
+if (!selProjId) {
+  filteredMembers = uniqueMembers;
+}else {
+  var selProj = projects.find(function(p){ return p.id === selProjId; });
+  if (selProj && selProj.members && selProj.members.length > 0) {
+    filteredMembers = uniqueMembers.filter(function(m){
+      return selProj.members.indexOf(m.id) !== -1;
+    });
+  } else {
+    filteredMembers = [];
+  }
+  }
+
+  /* Hint metni güncelle */
+  var hintEl = document.getElementById('teamProjHint');
+  if (hintEl) {
+    if (selProjId) {
+      var sp = projects.find(function(p){ return p.id === selProjId; });
+      hintEl.textContent = sp
+        ? ('"' + sp.name + '" projesinde ' + filteredMembers.length + ' üye gösteriliyor')
+        : 'Proje bulunamadı';
+      hintEl.style.color = 'var(--green-700)';
+    } else {
+      hintEl.textContent = 'Projeye göre üye listesini filtreleyin';
+      hintEl.style.color = '';
+    }
+  }
+
+  /* Boş durumlar */
+  if (teamMembers.length === 0) {
+    list.innerHTML = '<p class="db-empty-sm" style="padding:24px 0">' +
+      'Henüz üye eklenmedi. "Üye Davet Et" butonunu kullanın.</p>';
+    return;
+  }
+
+  if (filteredMembers.length === 0 && selProjId) {
+    var spName = '';
+    var spObj = projects.find(function(p){ return p.id === selProjId; });
+    if (spObj) spName = spObj.name;
+
+    list.innerHTML = '<div class="db-empty-state" style="border:none;box-shadow:none;padding:40px 24px">' +
+      '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5">' +
+        '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>' +
+        '<path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>' +
+      '</svg>' +
+      '<p>"' + escHtml(spName) + '" projesinde üye yok.</p>' +
+      '<span>Bu projeyi düzenleyerek üye ekleyebilirsiniz.</span>' +
+      '</div>';
+    return;
+  }
+
+  /* Tablo render */
+  var roleLabel = { pm:'Proje Yöneticisi', member:'Ekip Üyesi', viewer:'Görüntüleyici' };
+  var roleCls   = { pm:'db-role-pm', member:'db-role-member', viewer:'db-role-viewer' };
+
+  var html = '<table class="db-team-table">' +
+    '<thead><tr>' +
+    '<th>Üye</th>' +
+    '<th>Rol</th>' +
+    '<th>' + (selProjId ? 'Proje Görevi / Toplam' : 'Görev Sayısı') + '</th>' +
+    '<th>Projeler</th>' +
+    '<th>Katılım</th>' +
+    '<th></th>' +
+    '</tr></thead><tbody>';
+
+  filteredMembers.forEach(function(m) {
+    var totalTaskCount = tasks.filter(function(t){
+      return t.assignee && t.assignee.toLowerCase() === m.name.toLowerCase();
+    }).length;
+
+    var projTaskCount = selProjId
+      ? tasks.filter(function(t){
+          return t.assignee && t.assignee.toLowerCase() === m.name.toLowerCase()
+            && t.projectId === selProjId;
+        }).length
+      : totalTaskCount;
+
+    var ini    = m.name.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+    var joined = new Date(m.joinedAt).toLocaleDateString('tr-TR', {
+      day:'numeric', month:'short', year:'numeric'
+    });
+
+    /* Üyenin projelerini bul */
+    var memberProjects = projects.filter(function(p){
+      return p.members && p.members.indexOf(m.id) !== -1;
+    });
+    var projBadgesHtml = memberProjects.slice(0,3).map(function(p){
+      var isCurrent = p.id === selProjId;
+      return '<span class="db-proj-badge db-proj-' + p.color + '" style="margin-right:3px;' +
+        (isCurrent ? 'outline:1.5px solid var(--green-600);outline-offset:1px;' : '') + '">' +
+        escHtml(p.name.substring(0,12)) + '</span>';
+    }).join('');
+    if (memberProjects.length > 3) {
+      projBadgesHtml += '<span style="font-size:11px;color:var(--text-muted)">+' + (memberProjects.length-3) + '</span>';
+    }
+    if (memberProjects.length === 0) {
+      projBadgesHtml = '<span style="font-size:12px;color:var(--text-muted)">—</span>';
+    }
+
+    /* Görev sayısı gösterimi */
+    var taskCountHtml;
+    if (selProjId) {
+      taskCountHtml = '<span style="font-weight:700;color:var(--green-700)">' + projTaskCount + '</span>' +
+        '<span style="font-size:11px;color:var(--text-muted)"> / ' + totalTaskCount + '</span>';
+    } else {
+      taskCountHtml = '<span style="font-weight:600;color:var(--text-primary)">' + totalTaskCount + '</span>' +
+        '<span style="font-size:11px;color:var(--text-muted);margin-left:3px">görev</span>';
+    }
+
+    html += '<tr>' +
+      '<td><div class="db-member-cell">' +
+        '<div class="db-team-avatar">' + escHtml(ini) + '</div>' +
+        '<div>' +
+          '<div class="db-member-name db-member-clickable" ' +
+            'onclick="openMemberProfile(\'' + m.id + '\')" title="Profili Gör">' +
+            escHtml(m.name) +
+          '</div>' +
+          (m.email ? '<div class="db-member-email">' + escHtml(m.email) + '</div>' : '') +
+        '</div>' +
+      '</div></td>' +
+      '<td><span class="db-role-badge ' + (roleCls[m.role]||'db-role-member') + '">' +
+        (roleLabel[m.role]||m.role) + '</span></td>' +
+      '<td>' + taskCountHtml + '</td>' +
+      '<td>' + projBadgesHtml + '</td>' +
+      '<td>' + joined + '</td>' +
+      '<td><button class="db-remove-btn" onclick="removeMember(\'' + m.id + '\')" title="Üyeyi Çıkar">' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+          '<polyline points="3 6 5 6 21 6"/>' +
+          '<path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>' +
+        '</svg>' +
+      '</button></td>' +
+    '</tr>';
+  });
+
+  html += '</tbody></table>';
+  list.innerHTML = html;
 }
 
 /* ── PROFİL MODAL ─────────────────────────────── */

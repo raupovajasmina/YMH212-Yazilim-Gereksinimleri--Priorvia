@@ -339,6 +339,19 @@
           Üye Davet Et
         </button>
       </div>
+      <!-- Proje Filtresi -->
+      <div class="db-team-proj-selector" id="teamProjSelector">
+        <span class="db-team-proj-label">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          Proje Filtresi:
+        </span>
+        <select class="db-select db-team-proj-select" id="teamProjectFilter">
+          <option value="">👥 Tüm Üyeler</option>
+        </select>
+        <span class="db-team-proj-hint" id="teamProjHint">Projeye göre üye listesini filtreleyin</span>
+      </div>
       <div class="db-stats" style="grid-template-columns:repeat(3,1fr)">
         <div class="db-stat-card">
           <div class="db-stat-icon si-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
